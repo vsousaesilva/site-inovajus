@@ -1,0 +1,1151 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>INOVAJUS — Laboratório de Inovação da JFCE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --magenta:    #D41876;
+  --green:      #7AB648;
+  --blue:       #00A0E3;
+  --orange:     #F7941D;
+  --yellow:     #FFC107;
+
+  --bg:         #FFFFFF;
+  --bg-off:     #F9F9F8;
+  --bg-light:   #F3F3F1;
+  --border:     #E6E6E2;
+  --border-mid: #CECEC8;
+
+  --ink:        #121212;
+  --ink-sub:    #484848;
+  --ink-muted:  #909090;
+
+  --font-serif: 'Cormorant Garamond', Georgia, serif;
+  --font-sans:  'Plus Jakarta Sans', sans-serif;
+  --font-mono:  'JetBrains Mono', monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-sans);
+  background: var(--bg);
+  color: var(--ink);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection { background: var(--magenta); color: #fff; }
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border-mid); border-radius: 2px; }
+
+/* ── NAVIGATION ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  height: 60px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 48px;
+  background: rgba(255,255,255,0.96);
+  backdrop-filter: blur(16px) saturate(180%);
+  border-bottom: 1px solid var(--border);
+  opacity: 0; transform: translateY(-12px);
+  transition: opacity 0.6s ease, transform 0.6s ease, box-shadow 0.3s ease;
+  pointer-events: none;
+}
+nav.visible {
+  opacity: 1; transform: translateY(0);
+  pointer-events: auto;
+}
+nav.scrolled { box-shadow: 0 4px 32px rgba(0,0,0,0.06); }
+
+.nav-brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+/* Logo no nav — imagem real quando disponível, fallback nos dots */
+.nav-logo-img {
+  height: 36px; width: auto; display: block;
+}
+/* Fallback: dots + wordmark (visíveis apenas quando a imagem falha) */
+.nav-logo-fallback { display: none; align-items: center; gap: 10px; }
+.nav-dots { display: grid; grid-template-columns: 1fr 1fr; gap: 3px; width: 18px; height: 18px; }
+.nav-dots span { display: block; border-radius: 50%; }
+.nav-dots span:nth-child(1) { background: var(--magenta); }
+.nav-dots span:nth-child(2) { background: var(--blue); }
+.nav-dots span:nth-child(3) { background: var(--green); }
+.nav-dots span:nth-child(4) { background: var(--orange); }
+.nav-wordmark {
+  font-family: var(--font-sans); font-weight: 800; font-size: 15px;
+  letter-spacing: 3px; color: var(--ink);
+}
+/* Footer logo */
+.footer-logo-img { height: 28px; width: auto; display: block; margin-bottom: 6px; filter: brightness(0) invert(1); }
+.footer-logo-fallback { display: none; }
+
+.nav-links { display: flex; align-items: center; gap: 2px; }
+.nav-links a {
+  color: var(--ink-muted); font-size: 12.5px; font-weight: 500;
+  padding: 6px 12px; text-decoration: none; letter-spacing: 0.2px;
+  transition: color 0.2s; border-radius: 3px;
+}
+.nav-links a:hover { color: var(--ink); }
+.nav-links a.active { color: var(--magenta); }
+
+.nav-badge {
+  font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 1.5px;
+  color: var(--ink-muted); border: 1px solid var(--border);
+  padding: 4px 10px; border-radius: 2px;
+}
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  display: block;
+  position: relative; overflow: hidden;
+  background: #fff;
+}
+
+/* Full-screen video — ocupa 100% sem nenhum overlay */
+.hero-video-bg {
+  position: absolute; inset: 0; z-index: 0;
+}
+.hero-video-bg video {
+  width: 100%; height: 100%; object-fit: contain;
+  display: block; background: #fff;
+}
+/* overlay mínimo apenas para garantir legibilidade do texto secundário */
+.hero-video-overlay {
+  position: absolute; inset: 0; z-index: 1;
+  background: linear-gradient(to top,
+    rgba(255,255,255,0.88) 0%,
+    rgba(255,255,255,0.0) 28%,
+    transparent 100%);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+.hero-video-overlay.show { opacity: 1; }
+
+/* Secondary hero content — absolutamente posicionado no rodapé,
+   oculto até o vídeo terminar ou o utilizador interagir */
+.hero-secondary {
+  position: absolute; bottom: 0; left: 0; right: 0; z-index: 2;
+  padding: 32px 48px 52px;
+  display: flex; flex-direction: column; align-items: flex-start;
+  text-align: left;
+  opacity: 0; transform: translateY(24px);
+  transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1),
+              transform 0.9s cubic-bezier(0.16,1,0.3,1);
+  pointer-events: none;
+}
+.hero-secondary.revealed {
+  opacity: 1; transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* 5-color bar */
+.hero-bar {
+  display: flex; height: 3px; width: 320px; max-width: 90%;
+  margin-bottom: 36px; border-radius: 2px; overflow: hidden;
+}
+.hero-bar span { flex: 1; }
+.hero-bar span:nth-child(1) { background: var(--magenta); }
+.hero-bar span:nth-child(2) { background: var(--green); }
+.hero-bar span:nth-child(3) { background: var(--blue); }
+.hero-bar span:nth-child(4) { background: var(--orange); }
+.hero-bar span:nth-child(5) { background: var(--yellow); }
+
+.hero-coords {
+  display: flex; gap: 56px; justify-content: center; flex-wrap: wrap;
+  margin-bottom: 36px;
+}
+.hero-coord-item .role {
+  font-family: var(--font-mono); font-size: 9px; letter-spacing: 2.5px;
+  text-transform: uppercase; color: var(--magenta); margin-bottom: 5px;
+}
+.hero-coord-item .name {
+  font-family: var(--font-serif); font-size: 19px; font-weight: 500; color: var(--ink);
+}
+
+.hero-cta { display: flex; gap: 12px; justify-content: flex-start; flex-wrap: wrap; }
+
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 12px 28px; background: var(--ink); color: #fff;
+  font-size: 12.5px; font-weight: 600; letter-spacing: 0.5px;
+  text-decoration: none; border: 1px solid var(--ink);
+  border-radius: 2px; cursor: pointer; transition: all 0.2s;
+}
+.btn-primary:hover { background: var(--magenta); border-color: var(--magenta); }
+
+.btn-outline {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 12px 28px; background: transparent; color: var(--ink);
+  font-size: 12.5px; font-weight: 500; letter-spacing: 0.5px;
+  text-decoration: none; border: 1px solid var(--border-mid);
+  border-radius: 2px; cursor: pointer; transition: all 0.2s;
+}
+.btn-outline:hover { border-color: var(--ink); }
+
+/* Scroll hint — aparece no centro-baixo, some após reveal */
+.scroll-hint {
+  position: absolute; bottom: 28px; left: 50%;
+  transform: translateX(-50%);
+  z-index: 4;
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  opacity: 0; animation: fadeIn 1s 1.5s forwards;
+  transition: opacity 0.5s;
+}
+.scroll-hint.hidden { opacity: 0 !important; pointer-events: none; }
+.scroll-hint-label {
+  font-family: var(--font-mono); font-size: 8.5px;
+  letter-spacing: 2px; text-transform: uppercase; color: var(--ink-muted);
+}
+.scroll-hint-line {
+  width: 1px; height: 44px; background: var(--border-mid);
+  position: relative; overflow: hidden;
+}
+.scroll-hint-line::after {
+  content: ''; position: absolute; top: -100%; left: 0;
+  width: 100%; height: 100%; background: var(--magenta);
+  animation: lineScroll 2s 2s infinite ease-in-out;
+}
+
+@keyframes lineScroll { 0% { top: -100%; } 100% { top: 100%; } }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeIn  { from { opacity: 0; } to { opacity: 1; } }
+
+/* ── DASHBOARD BANNER ── */
+.dashboard-banner {
+  background: var(--ink);
+  padding: 16px 48px;
+}
+.dashboard-banner-inner {
+  max-width: 1200px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 24px; flex-wrap: wrap;
+}
+.dashboard-banner-text {
+  display: flex; align-items: center; gap: 12px;
+}
+.dashboard-tag {
+  font-family: var(--font-mono); font-size: 8.5px; letter-spacing: 2px;
+  text-transform: uppercase; background: var(--magenta); color: #fff;
+  padding: 3px 8px; border-radius: 2px; flex-shrink: 0;
+}
+.dashboard-desc {
+  font-size: 13.5px; color: rgba(255,255,255,0.75); font-weight: 300;
+}
+.dashboard-desc strong { color: #fff; font-weight: 600; }
+.btn-dashboard {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 9px 22px; background: transparent; color: #fff;
+  font-size: 12px; font-weight: 600; letter-spacing: 0.5px;
+  text-decoration: none; border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 2px; white-space: nowrap;
+  transition: all 0.2s;
+}
+.btn-dashboard:hover { background: var(--magenta); border-color: var(--magenta); }
+
+/* ── SECTION BASE ── */
+section { padding: 96px 48px; }
+.container { max-width: 1200px; margin: 0 auto; }
+.section-header { margin-bottom: 56px; }
+
+.section-tag {
+  display: inline-block; font-family: var(--font-mono); font-size: 9.5px;
+  letter-spacing: 3px; text-transform: uppercase;
+  color: var(--magenta); margin-bottom: 16px;
+}
+.section-title {
+  font-family: var(--font-serif);
+  font-size: clamp(36px, 5vw, 58px); font-weight: 500;
+  letter-spacing: -0.5px; line-height: 1.05; color: var(--ink); margin-bottom: 20px;
+}
+.section-title em { font-style: italic; font-weight: 300; color: var(--ink-muted); }
+.section-desc {
+  font-size: 15px; font-weight: 300; color: var(--ink-sub);
+  line-height: 1.85; max-width: 560px;
+}
+
+/* ── ABOUT / NUMBERS ── */
+#sobre { background: var(--bg); border-top: 1px solid var(--border); }
+
+.numbers-row {
+  display: grid; grid-template-columns: repeat(5, 1fr);
+  border: 1px solid var(--border); border-radius: 3px; overflow: hidden;
+  margin-bottom: 48px;
+}
+.number-card {
+  padding: 40px 20px; text-align: center;
+  border-right: 1px solid var(--border); transition: background 0.25s;
+}
+.number-card:last-child { border-right: none; }
+.number-card:hover { background: var(--bg-off); }
+.number-card .num {
+  font-family: var(--font-serif); font-size: 56px; font-weight: 600;
+  line-height: 1; color: var(--ink); margin-bottom: 8px;
+}
+.number-card .num-plus { color: var(--magenta); }
+.number-card .label { font-size: 11.5px; color: var(--ink-muted); line-height: 1.6; font-weight: 400; }
+
+.mission-row {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  background: var(--border); border-radius: 3px; overflow: hidden;
+  border: 1px solid var(--border);
+}
+.mission-card { background: var(--bg); padding: 40px 32px; transition: background 0.25s; }
+.mission-card:hover { background: var(--bg-off); }
+.mission-icon { width: 36px; height: 36px; margin-bottom: 20px; }
+.mission-card h3 { font-family: var(--font-serif); font-size: 22px; font-weight: 500; margin-bottom: 10px; }
+.mission-card p { font-size: 13.5px; color: var(--ink-sub); line-height: 1.8; font-weight: 300; }
+
+/* ── EIXOS ── */
+#eixos {
+  background: var(--bg-off);
+  border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+}
+.eixos-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr);
+  background: var(--border); border: 1px solid var(--border);
+  border-radius: 3px; overflow: hidden;
+}
+.eixo-card {
+  background: var(--bg); padding: 44px 40px;
+  border-left: 4px solid transparent; transition: background 0.25s;
+}
+.eixo-card:hover { background: #FAFAFA; }
+.eixo-card.e1 { border-left-color: var(--blue); }
+.eixo-card.e2 { border-left-color: var(--green); }
+.eixo-card.e3 { border-left-color: var(--orange); }
+.eixo-card.e4 { border-left-color: var(--magenta); }
+
+.eixo-label {
+  font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 2px;
+  text-transform: uppercase; display: flex; align-items: center; gap: 8px; margin-bottom: 16px;
+}
+.eixo-label::before { content: ''; display: block; width: 18px; height: 1px; }
+.e1 .eixo-label { color: var(--blue); } .e1 .eixo-label::before { background: var(--blue); }
+.e2 .eixo-label { color: var(--green); } .e2 .eixo-label::before { background: var(--green); }
+.e3 .eixo-label { color: var(--orange); } .e3 .eixo-label::before { background: var(--orange); }
+.e4 .eixo-label { color: var(--magenta); } .e4 .eixo-label::before { background: var(--magenta); }
+
+.eixo-card h3 { font-family: var(--font-serif); font-size: 24px; font-weight: 500; letter-spacing: -0.2px; margin-bottom: 14px; }
+.eixo-card p { font-size: 13.5px; color: var(--ink-sub); line-height: 1.85; font-weight: 300; margin-bottom: 24px; }
+.eixo-coord { font-size: 12px; color: var(--ink-muted); padding-top: 16px; border-top: 1px solid var(--border); font-family: var(--font-mono); letter-spacing: 0.3px; }
+.eixo-coord strong { font-family: var(--font-sans); font-weight: 500; color: var(--ink-sub); }
+
+/* ── PROJECTS ── */
+#projetos { background: var(--bg); border-top: 1px solid var(--border); }
+
+.projects-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  /* bordas nas cards, não no container — evita fundo cinza em células vazias */
+  border-top: 1px solid var(--border);
+  border-left: 1px solid var(--border);
+  border-radius: 3px; overflow: hidden;
+}
+.project-card {
+  background: var(--bg); padding: 36px 28px;
+  display: flex; flex-direction: column;
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  transition: background 0.25s;
+}
+.project-card:hover { background: var(--bg-off); }
+
+.project-status {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--font-mono); font-size: 9px;
+  letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 20px;
+}
+.project-status::before { content: ''; width: 6px; height: 6px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
+.status-concluded { color: var(--green); } .status-concluded::before { background: var(--green); }
+.status-dev { color: var(--blue); } .status-dev::before { background: var(--blue); }
+.status-active { color: var(--orange); } .status-active::before { background: var(--orange); }
+.status-implanting { color: var(--magenta); } .status-implanting::before { background: var(--magenta); }
+
+.project-card h3 { font-family: var(--font-serif); font-size: 22px; font-weight: 500; letter-spacing: -0.2px; line-height: 1.2; margin-bottom: 12px; }
+.project-card p { font-size: 13px; color: var(--ink-sub); line-height: 1.85; font-weight: 300; margin-bottom: auto; padding-bottom: 20px; flex: 1; }
+.project-meta { padding-top: 16px; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 4px; }
+.project-meta span { font-size: 10.5px; color: var(--ink-muted); font-family: var(--font-mono); letter-spacing: 0.3px; }
+
+/* ── TIMELINE ── */
+#timeline { background: var(--bg-off); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+
+.timeline-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+.timeline { position: relative; }
+.timeline::before { content: ''; position: absolute; left: 0; top: 10px; bottom: 0; width: 1px; background: var(--border); }
+
+.timeline-item { padding-left: 28px; padding-bottom: 44px; position: relative; }
+.timeline-item:last-child { padding-bottom: 0; }
+.tl-dot { position: absolute; left: -4px; top: 10px; width: 9px; height: 9px; border-radius: 50%; background: var(--magenta); border: 2px solid var(--bg-off); transition: transform 0.2s; }
+.timeline-item:hover .tl-dot { transform: scale(1.4); }
+.tl-dot.tl-new { background: var(--blue); }
+
+.tl-year { font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 2px; text-transform: uppercase; color: var(--magenta); margin-bottom: 6px; }
+.tl-year.tl-new { color: var(--blue); }
+.timeline-item h4 { font-family: var(--font-serif); font-size: 20px; font-weight: 500; margin-bottom: 8px; }
+.timeline-item p { font-size: 13px; color: var(--ink-sub); line-height: 1.75; font-weight: 300; }
+.tl-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-family: var(--font-mono); font-size: 8.5px; letter-spacing: 1.5px;
+  text-transform: uppercase; color: var(--blue);
+  border: 1px solid rgba(0,160,227,0.3); padding: 3px 8px; border-radius: 2px;
+  margin-bottom: 8px;
+}
+
+/* ── TEAM ── */
+#equipe { background: var(--bg); border-top: 1px solid var(--border); }
+
+.team-leaders {
+  display: grid; grid-template-columns: repeat(2, 1fr);
+  background: var(--border); border: 1px solid var(--border);
+  border-radius: 3px 3px 0 0; overflow: hidden; margin-bottom: 1px;
+}
+.team-leader { background: var(--bg); padding: 40px 36px; border-top: 3px solid transparent; transition: background 0.25s; }
+.team-leader:first-child { border-top-color: var(--magenta); }
+.team-leader:last-child  { border-top-color: var(--blue); }
+.team-leader:hover { background: var(--bg-off); }
+.leader-role { font-family: var(--font-mono); font-size: 9px; letter-spacing: 2.5px; text-transform: uppercase; margin-bottom: 10px; }
+.team-leader:first-child .leader-role { color: var(--magenta); }
+.team-leader:last-child  .leader-role { color: var(--blue); }
+.team-leader h3 { font-family: var(--font-serif); font-size: 26px; font-weight: 500; margin-bottom: 6px; }
+.team-leader p { font-size: 12.5px; color: var(--ink-muted); font-weight: 300; }
+
+.team-eixos {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  background: var(--border); border: 1px solid var(--border);
+  border-top: none; border-radius: 0 0 3px 3px; overflow: hidden;
+}
+.team-card { background: var(--bg); padding: 32px 24px; transition: background 0.25s; }
+.team-card:hover { background: var(--bg-off); }
+.team-color-bar { width: 24px; height: 3px; border-radius: 2px; margin-bottom: 18px; }
+.team-card h3 { font-family: var(--font-serif); font-size: 18px; font-weight: 500; margin-bottom: 4px; line-height: 1.2; }
+.team-eixo-role { font-family: var(--font-mono); font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; display: block; margin-bottom: 12px; }
+.team-card p { font-size: 12.5px; color: var(--ink-muted); line-height: 1.65; font-weight: 300; }
+
+/* ── CONTACT ── */
+#contato { background: var(--bg-off); border-top: 1px solid var(--border); }
+
+.contact-grid { display: grid; grid-template-columns: 1fr 320px; gap: 56px; align-items: start; }
+.contact-form { background: var(--bg); border: 1px solid var(--border); border-radius: 3px; padding: 40px; }
+.contact-form-title { font-family: var(--font-serif); font-size: 26px; font-weight: 500; margin-bottom: 28px; }
+
+.form-group { margin-bottom: 18px; }
+.form-group label { display: block; font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 7px; }
+.form-group input, .form-group select, .form-group textarea {
+  width: 100%; padding: 11px 14px; background: var(--bg-off);
+  border: 1px solid var(--border); border-radius: 2px; font-size: 13.5px;
+  font-family: var(--font-sans); color: var(--ink);
+  transition: border-color 0.2s, background 0.2s; outline: none;
+}
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+  border-color: var(--ink-sub); background: var(--bg);
+}
+.form-group textarea { resize: vertical; min-height: 120px; }
+.form-group select { appearance: none; cursor: pointer; }
+
+.form-submit {
+  display: inline-flex; align-items: center; gap: 8px; width: 100%; justify-content: center;
+  padding: 13px 28px; background: var(--ink); color: #fff;
+  font-size: 12.5px; font-weight: 600; letter-spacing: 0.5px;
+  border: 1px solid var(--ink); border-radius: 2px; cursor: pointer;
+  transition: all 0.2s; font-family: var(--font-sans);
+}
+.form-submit:hover { background: var(--magenta); border-color: var(--magenta); }
+
+.contact-aside { display: flex; flex-direction: column; gap: 12px; }
+.info-card { background: var(--bg); border: 1px solid var(--border); border-radius: 3px; padding: 22px 24px; transition: border-color 0.2s; }
+.info-card:hover { border-color: var(--border-mid); }
+.info-card h4 { font-family: var(--font-mono); font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 8px; }
+.info-card p { font-size: 13px; color: var(--ink-sub); line-height: 1.75; }
+.info-card a { color: var(--magenta); text-decoration: none; }
+.info-card a:hover { text-decoration: underline; }
+
+/* ── FOOTER ── */
+footer { background: var(--ink); color: rgba(255,255,255,0.45); padding: 48px; }
+.footer-inner { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 24px; }
+.footer-brand-name { font-family: var(--font-sans); font-weight: 800; font-size: 14px; letter-spacing: 3px; color: #fff; margin-bottom: 4px; }
+.footer-brand-sub { font-size: 11.5px; color: rgba(255,255,255,0.3); }
+.footer-links { display: flex; gap: 24px; flex-wrap: wrap; align-items: center; }
+.footer-links a { color: rgba(255,255,255,0.35); font-size: 12.5px; text-decoration: none; transition: color 0.2s; }
+.footer-links a:hover { color: rgba(255,255,255,0.85); }
+.footer-copy { max-width: 1200px; margin: 24px auto 0; padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.08); font-size: 10.5px; color: rgba(255,255,255,0.2); }
+
+/* ── DIVIDER ── */
+.color-divider { display: flex; height: 3px; border: none; margin: 0; }
+.color-divider span { flex: 1; }
+.color-divider span:nth-child(1) { background: var(--magenta); }
+.color-divider span:nth-child(2) { background: var(--green); }
+.color-divider span:nth-child(3) { background: var(--blue); }
+.color-divider span:nth-child(4) { background: var(--orange); }
+.color-divider span:nth-child(5) { background: var(--yellow); }
+
+/* ── SCROLL REVEAL ── */
+.reveal { opacity: 0; transform: translateY(22px); transition: opacity 0.65s ease, transform 0.65s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 1100px) {
+  .numbers-row { grid-template-columns: repeat(3, 1fr); }
+  .projects-grid { grid-template-columns: repeat(2, 1fr); border-left: 1px solid var(--border); border-top: 1px solid var(--border); }
+  .team-eixos { grid-template-columns: repeat(2, 1fr); }
+  .contact-grid { grid-template-columns: 1fr; }
+  .timeline-wrap { grid-template-columns: 1fr; gap: 40px; }
+}
+@media (max-width: 768px) {
+  nav { padding: 0 20px; }
+  .nav-links { display: none; }
+  .nav-badge { display: none; }
+  section { padding: 64px 20px; }
+  .hero-secondary { padding: 24px 20px 48px; }
+  .eixos-grid { grid-template-columns: 1fr; }
+  .projects-grid { grid-template-columns: 1fr; }
+  .numbers-row { grid-template-columns: repeat(2, 1fr); }
+  .mission-row { grid-template-columns: 1fr; }
+  .team-leaders { grid-template-columns: 1fr; }
+  .team-eixos { grid-template-columns: repeat(2, 1fr); }
+  .dashboard-banner { padding: 16px 20px; }
+  footer { padding: 36px 20px; }
+  .footer-inner { flex-direction: column; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── NAVIGATION ── -->
+<nav id="main-nav">
+  <div class="nav-brand">
+    <!--
+      LOGO NO CABEÇALHO
+      Coloque o arquivo da logo no mesmo diretório com o nome: logo-inovajus.png
+      Recomendado: PNG com fundo transparente, altura mínima 72px.
+      O fallback (dots + texto) aparece automaticamente se a imagem não carregar.
+    -->
+    <img src="logo-inovajus.png" alt="Inovajus" class="nav-logo-img"
+         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+    <div class="nav-logo-fallback">
+      <div class="nav-dots"><span></span><span></span><span></span><span></span></div>
+      <span class="nav-wordmark">INOVAJUS</span>
+    </div>
+  </div>
+  <div class="nav-links">
+    <a href="#hero" class="active">Início</a>
+    <a href="#sobre">Sobre</a>
+    <a href="#eixos">Eixos</a>
+    <a href="#projetos">Projetos</a>
+    <a href="#timeline">História</a>
+    <a href="#equipe">Equipe</a>
+    <a href="#contato">Contato</a>
+  </div>
+  <span class="nav-badge">Rede de Inovação — JF5</span>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero" id="hero">
+
+  <!-- Vídeo de fundo (Animate_logo_elements.mp4 no mesmo diretório) -->
+  <div class="hero-video-bg">
+    <video id="hero-video" autoplay muted playsinline>
+      <source src="Animate_logo_elements.mp4" type="video/mp4">
+    </video>
+    <div class="hero-video-overlay"></div>
+  </div>
+
+  <!-- Conteúdo secundário: apenas botões, alinhados à esquerda -->
+  <div class="hero-secondary" id="hero-secondary">
+    <div class="hero-cta">
+      <a href="#projetos" class="btn-primary">Conheça nossos Projetos →</a>
+      <a href="#contato" class="btn-outline">Fale Conosco</a>
+    </div>
+  </div>
+
+  <div class="scroll-hint" id="scroll-hint">
+    <span class="scroll-hint-label">Scroll</span>
+    <div class="scroll-hint-line"></div>
+  </div>
+</section>
+
+<!-- ── DASHBOARD BANNER ── -->
+<div class="dashboard-banner">
+  <div class="dashboard-banner-inner">
+    <div class="dashboard-banner-text">
+      <span class="dashboard-tag">Novo</span>
+      <p class="dashboard-desc">
+        <strong>Dashboard Inovajus</strong> — acompanhe em tempo real as iniciativas, métricas e o progresso das atividades do laboratório.
+      </p>
+    </div>
+    <a href="https://inovajus-dashboard.vercel.app/" target="_blank" rel="noopener" class="btn-dashboard">
+      Acessar Dashboard →
+    </a>
+  </div>
+</div>
+
+<div class="color-divider"><span></span><span></span><span></span><span></span><span></span></div>
+
+<!-- ── SOBRE ── -->
+<section id="sobre">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-tag">Quem somos</span>
+      <h2 class="section-title">Inovação com <em>propósito</em></h2>
+      <p class="section-desc">O INOVAJUS é o laboratório de inovação da Justiça Federal no Ceará — um espaço institucional dedicado a transformar a cultura organizacional e a prestação jurisdicional por meio de metodologias de design, experimentação responsável e desenvolvimento humano centrado nas pessoas.</p>
+    </div>
+
+    <div class="numbers-row reveal">
+      <div class="number-card">
+        <div class="num" data-target="150" data-suffix="+"><span class="num-val">0</span><span class="num-plus">+</span></div>
+        <div class="label">Servidores<br>capacitados</div>
+      </div>
+      <div class="number-card">
+        <div class="num" data-target="60"><span class="num-val">0</span></div>
+        <div class="label">Certificados<br>Servidor + IA</div>
+      </div>
+      <div class="number-card">
+        <div class="num" data-target="80" data-suffix="+"><span class="num-val">0</span><span class="num-plus">+</span></div>
+        <div class="label">Prompts jurídicos<br>no repositório</div>
+      </div>
+      <div class="number-card">
+        <div class="num" data-target="4"><span class="num-val">0</span></div>
+        <div class="label">Eixos de<br>atuação</div>
+      </div>
+      <div class="number-card">
+        <div class="num" data-target="11" data-suffix="+"><span class="num-val">0</span><span class="num-plus">+</span></div>
+        <div class="label">Projetos<br>ativos ou concluídos</div>
+      </div>
+    </div>
+
+    <div class="mission-row reveal">
+      <div class="mission-card">
+        <div class="mission-icon">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+            <circle cx="14" cy="14" r="10" stroke="#D41876" stroke-width="1.5" fill="none"/>
+            <circle cx="14" cy="14" r="4" fill="#D41876"/>
+          </svg>
+        </div>
+        <h3>Missão</h3>
+        <p>Fomentar uma cultura de inovação aberta e colaborativa na JFCE, apoiando o desenvolvimento de soluções que melhorem a prestação jurisdicional, a experiência dos usuários e as condições de trabalho dos servidores — com método, escuta ativa e experimentação responsável.</p>
+      </div>
+      <div class="mission-card">
+        <div class="mission-icon">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+            <path d="M4 24 L14 4 L24 24" stroke="#00A0E3" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+            <line x1="8" y1="17" x2="20" y2="17" stroke="#00A0E3" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <h3>Visão 2026</h3>
+        <p>Consolidar a JFCE como referência em inovação pública na Rede da Justiça Federal, demonstrando que a transformação institucional sustentável começa pelas pessoas e se fortalece com governança, método e tecnologia bem aplicada.</p>
+      </div>
+      <div class="mission-card">
+        <div class="mission-icon">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+            <rect x="4" y="14" width="5" height="10" rx="1.5" stroke="#7AB648" stroke-width="1.5" fill="none"/>
+            <rect x="11.5" y="9" width="5" height="15" rx="1.5" stroke="#7AB648" stroke-width="1.5" fill="none"/>
+            <rect x="19" y="4" width="5" height="20" rx="1.5" stroke="#7AB648" stroke-width="1.5" fill="none"/>
+          </svg>
+        </div>
+        <h3>Como atuamos</h3>
+        <p>Nossos quatro eixos integram modernização de processos judiciais, proteção de dados pessoais, letramento tecnológico e promoção da equidade de gênero — conectando método, ciência e humanização na construção de um judiciário mais eficiente e acessível.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="color-divider"><span></span><span></span><span></span><span></span><span></span></div>
+
+<!-- ── EIXOS ── -->
+<section id="eixos">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-tag">Frentes de atuação</span>
+      <h2 class="section-title">Nossos <em>Eixos</em></h2>
+      <p class="section-desc">Quatro frentes integradas pela Portaria DF 161/2025, estruturando a atuação do Inovajus em torno de desafios concretos da Justiça Federal no Ceará.</p>
+    </div>
+
+    <div class="eixos-grid reveal">
+      <div class="eixo-card e1">
+        <div class="eixo-label">Eixo I</div>
+        <h3>PJe e Automação de Fluxos</h3>
+        <p>Automação de fluxos processuais, treinamento de magistrados, servidores e advogados. Projeto-bandeira: fluxo automatizado de Benefícios por Incapacidade com alcance nacional.</p>
+        <div class="eixo-coord">Coord.: <strong>Ítalo Martins</strong></div>
+      </div>
+      <div class="eixo-card e2">
+        <div class="eixo-label">Eixo II</div>
+        <h3>Segurança no Tratamento de Dados</h3>
+        <p>Governança de dados pessoais, LGPD, formação e ferramentas inovadoras. Projeto-bandeira: Inventário de Dados Pessoais da JFCE assistido por IA.</p>
+        <div class="eixo-coord">Coord.: <strong>Alexandra Anfrizio Cavalcante</strong></div>
+      </div>
+      <div class="eixo-card e3">
+        <div class="eixo-label">Eixo III</div>
+        <h3>Tecnologia e Inteligência Artificial</h3>
+        <p>IA generativa, automação, ciência de dados e capacitação. Projeto-bandeira: Curso Servidor + IA (21h certificado) + LowCodeJud.</p>
+        <div class="eixo-coord">Coord.: <strong>Victor César Falcão Viana</strong></div>
+      </div>
+      <div class="eixo-card e4">
+        <div class="eixo-label">Eixo IV</div>
+        <h3>Liderança Feminina</h3>
+        <p>Equidade de gênero, formação, diagnóstico e políticas institucionais. Projeto-bandeira: Diagnóstico de Gênero da JFCE — inédito no TRF5.</p>
+        <div class="eixo-coord">Coord.: <strong>Flávia Costa Barros Teixeira</strong></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="color-divider"><span></span><span></span><span></span><span></span><span></span></div>
+
+<!-- ── PROJETOS ── -->
+<section id="projetos">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-tag">Portfólio</span>
+      <h2 class="section-title">Projetos <em>Executados</em></h2>
+      <p class="section-desc">Iniciativas concebidas e desenvolvidas pelo Inovajus, abrangendo design de serviços, linguagem simples, inclusão digital, automação processual e desenvolvimento humano.</p>
+    </div>
+
+    <div class="projects-grid reveal">
+
+      <!-- 1. Mar/2019 -->
+      <div class="project-card">
+        <span class="project-status status-concluded">Concluído</span>
+        <h3>Pesquisa de Opinião — Você Gestor</h3>
+        <p>Primeira iniciativa do Inovajus, criada no seu lançamento para estimular servidores a apresentarem ideias inovadoras. A proposta vencedora — de Emanuela Silva Ribeiro — gerou um mecanismo permanente de coleta de opinião dos usuários sobre os serviços da JFCE.</p>
+        <div class="project-meta">
+          <span>Início e conclusão: Mar/2019</span>
+          <span>Design Thinking · Brainstorming</span>
+          <span>INOVAJUS</span>
+        </div>
+      </div>
+
+      <!-- 2. 2020 -->
+      <div class="project-card">
+        <span class="project-status status-active">Ativo</span>
+        <h3>Bolsa Débora Aguiar</h3>
+        <p>Programa de bolsas integrais para estudantes de Direito em situação de vulnerabilidade socioeconômica, em homenagem à Juíza Federal Débora Aguiar. A seleção considera mérito e critérios socioeconômicos, em parceria com instituições de ensino superior do Ceará.</p>
+        <div class="project-meta">
+          <span>Início: 2020</span>
+          <span>Bolsas de estudo</span>
+          <span>JFCE + IES parceiras</span>
+        </div>
+      </div>
+
+      <!-- 3. 2021 — HubJus -->
+      <div class="project-card">
+        <span class="project-status status-concluded">Concluído</span>
+        <h3>HubJus — Espaço Maracanaú</h3>
+        <p>Reestruturação do espaço físico da Subseção de Maracanaú com ambientes multifuncionais, coworking, espaço de descompressão e cápsulas de inclusão digital para acesso offline a serviços judiciais. Projeto piloto regional sob o framework HubJus 2021.1.</p>
+        <div class="project-meta">
+          <span>HubJus 2021.1</span>
+          <span>Design de espaços</span>
+          <span>Rede de Inovação TRF5</span>
+        </div>
+      </div>
+
+      <!-- 4. 2021 — Lab de Fluxos -->
+      <div class="project-card">
+        <span class="project-status status-active">Ativo</span>
+        <h3>Laboratório de Fluxos</h3>
+        <p>Otimização do sistema de processo judicial eletrônico por meio de equipes especializadas em TI e gestão processual, iniciativas de treinamento e participação em fóruns nacionais. Foco em automação de peças repetitivas e melhoria da experiência de magistrados e advogados.</p>
+        <div class="project-meta">
+          <span>Início: 2021</span>
+          <span>Automação processual</span>
+          <span>INOVAJUS + Eixo I</span>
+        </div>
+      </div>
+
+      <!-- 5. Ago/2021 — Mandado Cidadão -->
+      <div class="project-card">
+        <span class="project-status status-active">Ativo</span>
+        <h3>Mandado Cidadão</h3>
+        <p>Redesign de mandados judiciais com Legal Design, Visual Law e linguagem simples para tornar a comunicação do Judiciário mais compreensível ao cidadão. Incorpora nudges comportamentais que estimulam posturas colaborativas e conciliatórias. Parceria com o Laboratório Íris.</p>
+        <div class="project-meta">
+          <span>Início: Ago/2021</span>
+          <span>Legal Design · Visual Law</span>
+          <span>INOVAJUS + Laboratório Íris</span>
+        </div>
+      </div>
+
+      <!-- 6. 2022 — Linguagem Simples -->
+      <div class="project-card">
+        <span class="project-status status-active">Ativo</span>
+        <h3>Linguagem Simples</h3>
+        <p>Workshops e formações para promover a comunicação clara e acessível nas unidades administrativas e jurisdicionais da JFCE. O projeto capacita equipes a reescrever atos, despachos e comunicados em linguagem cidadã, com expansão gradual a toda a instituição.</p>
+        <div class="project-meta">
+          <span>Início: 2022</span>
+          <span>Formação e oficinas</span>
+          <span>INOVAJUS + Laboratório Íris</span>
+        </div>
+      </div>
+
+      <!-- 7. 2022 — Teatro PopRua -->
+      <div class="project-card">
+        <span class="project-status status-active">Ativo</span>
+        <h3>Teatro PopRua</h3>
+        <p>Apresentações teatrais que comunicam direitos e serviços do Judiciário Federal para a população em situação de rua, ampliando o acesso à Justiça e promovendo cidadania a grupos em situação de vulnerabilidade social em Fortaleza.</p>
+        <div class="project-meta">
+          <span>Início: 2022</span>
+          <span>Arte e cidadania</span>
+          <span>JFCE + parceiros sociais</span>
+        </div>
+      </div>
+
+      <!-- 8. Abr/2022 — Banco de Talentos -->
+      <div class="project-card">
+        <span class="project-status status-concluded">Concluído</span>
+        <h3>Banco de Talentos Dinâmico</h3>
+        <p>Ferramenta que cataloga competências, habilidades e preferências de servidores e magistrados, gerando sugestões automatizadas para alocação em grupos de trabalho, comissões e funções comissionadas. Desenvolvido com parceria técnica da UFRN e prevê expansão ao TRF5.</p>
+        <div class="project-meta">
+          <span>Início: Abr/2022</span>
+          <span>Metodologia Ágil</span>
+          <span>INOVAJUS + UFRN</span>
+        </div>
+      </div>
+
+      <!-- 9. 2023 — PID -->
+      <div class="project-card">
+        <span class="project-status status-active">Ativo</span>
+        <h3>PID — Jornada do Usuário</h3>
+        <p>Mapeamento e melhoria da experiência nos Pontos de Inclusão Digital (PIDs) — espaços equipados que permitem o acesso a serviços judiciais em regiões de baixa conectividade. O projeto identifica gargalos e propõe melhorias centradas nas necessidades reais dos usuários.</p>
+        <div class="project-meta">
+          <span>Início: 2023</span>
+          <span>Design de Serviço</span>
+          <span>INOVAJUS + Assessoria de TI</span>
+        </div>
+      </div>
+
+      <!-- 10. 2026 — LowCodeJud -->
+      <div class="project-card">
+        <span class="project-status status-implanting">Em implantação</span>
+        <h3>LowCodeJud</h3>
+        <p>Laboratório de tecnologia e IA do Inovajus dedicado ao desenvolvimento de soluções digitais por servidores da JFCE. Com foco em ferramentas de baixo código e IA generativa, capacita equipes a construir automações, formulários inteligentes e aplicações funcionais sem dependência de squads externos de TI.</p>
+        <div class="project-meta">
+          <span>Início: 2026</span>
+          <span>Low-code · IA Generativa</span>
+          <span>INOVAJUS + Eixo III</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="color-divider"><span></span><span></span><span></span><span></span><span></span></div>
+
+<!-- ── TIMELINE ── -->
+<section id="timeline">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-tag">Linha do tempo</span>
+      <h2 class="section-title">Nossa <em>História</em></h2>
+      <p class="section-desc">Marcos importantes na trajetória do Inovajus desde sua criação.</p>
+    </div>
+
+    <div class="timeline-wrap reveal">
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="tl-dot"></div>
+          <div class="tl-year">Março 2019</div>
+          <h4>Criação do Inovajus</h4>
+          <p>O Laboratório de Inovação da Justiça Federal no Ceará é inaugurado com o projeto "Você Gestor" como primeira iniciativa e a adoção do Design Thinking como método central.</p>
+        </div>
+        <div class="timeline-item">
+          <div class="tl-dot"></div>
+          <div class="tl-year">2020</div>
+          <h4>Bolsa Débora Aguiar</h4>
+          <p>Lançamento do programa de bolsas integrais para estudantes de Direito em situação de vulnerabilidade, em homenagem à Juíza Federal Débora Aguiar.</p>
+        </div>
+        <div class="timeline-item">
+          <div class="tl-dot"></div>
+          <div class="tl-year">Março 2021</div>
+          <h4>Talks de Inovação</h4>
+          <p>Lançamento da série de debates sobre inovação e tecnologia, em parceria com a ESMAFE-CE. Primeira edição abordou o trabalho híbrido e a lógica "remote first".</p>
+        </div>
+        <div class="timeline-item">
+          <div class="tl-dot"></div>
+          <div class="tl-year">Agosto 2021</div>
+          <h4>Mandado Cidadão e HubJus</h4>
+          <p>Início do projeto de redesign de mandados judiciais com Legal Design e lançamento do HubJus 2021.1 com o projeto piloto de Maracanaú.</p>
+        </div>
+      </div>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="tl-dot"></div>
+          <div class="tl-year">Abril 2022</div>
+          <h4>Banco de Talentos Dinâmico</h4>
+          <p>Início do desenvolvimento da ferramenta com IA para catalogar competências dos servidores, em parceria com a UFRN, com previsão de expansão ao TRF5.</p>
+        </div>
+        <div class="timeline-item">
+          <div class="tl-dot"></div>
+          <div class="tl-year">Novembro 2024</div>
+          <h4>Oficina Juazeiro do Norte</h4>
+          <p>Oficina de Design Thinking para co-projetar o novo prédio da Subseção de Juazeiro do Norte, com participação dos futuros usuários do espaço (terreno de 6.500m²).</p>
+        </div>
+        <div class="timeline-item">
+          <div class="tl-dot"></div>
+          <div class="tl-year">2025</div>
+          <h4>Portaria DF 161/2025 — Reestruturação</h4>
+          <p>Institucionalização dos quatro eixos de atuação, designação formal de coordenadores e alinhamento com o Plano Nacional de Inovação da Justiça Federal 2026.</p>
+        </div>
+        <div class="timeline-item">
+          <div class="tl-dot tl-new"></div>
+          <div class="tl-year tl-new">2026</div>
+          <div class="tl-badge">Novo</div>
+          <h4>LowCodeJud</h4>
+          <p>Criação do LowCodeJud — laboratório de tecnologia e IA do Inovajus voltado ao desenvolvimento de soluções digitais por servidores da JFCE. Com foco em ferramentas de baixo código e inteligência artificial generativa, o LowCodeJud capacita equipes a construir automações, formulários inteligentes e aplicações funcionais sem dependência de equipes externas de TI.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="color-divider"><span></span><span></span><span></span><span></span><span></span></div>
+
+<!-- ── EQUIPE ── -->
+<section id="equipe">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-tag">Liderança</span>
+      <h2 class="section-title">Nossa <em>Equipe</em></h2>
+      <p class="section-desc">Coordenadores designados pela Portaria da Direção do Foro nº 161/2025.</p>
+    </div>
+
+    <div class="team-leaders reveal">
+      <div class="team-leader">
+        <div class="leader-role">Coordenador Estratégico</div>
+        <h3>Dr. Júlio Rodrigues Coelho Neto</h3>
+        <p>Juiz Federal · Direção estratégica do Inovajus</p>
+      </div>
+      <div class="team-leader">
+        <div class="leader-role">Coordenador Executivo</div>
+        <h3>Vinícius Sousa e Silva</h3>
+        <p>Gestão executiva e operacional do Inovajus</p>
+      </div>
+    </div>
+
+    <div class="team-eixos reveal">
+      <div class="team-card">
+        <div class="team-color-bar" style="background:var(--blue)"></div>
+        <h3>Ítalo Martins</h3>
+        <span class="team-eixo-role" style="color:var(--blue)">Eixo I — PJe e Automação</span>
+        <p>Suporte ao PJe, automação de fluxos processuais e capacitação de magistrados, servidores e advogados.</p>
+      </div>
+      <div class="team-card">
+        <div class="team-color-bar" style="background:var(--green)"></div>
+        <h3>Alexandra Anfrizio Cavalcante</h3>
+        <span class="team-eixo-role" style="color:var(--green)">Eixo II — Segurança de Dados</span>
+        <p>LGPD, governança de dados pessoais, privacidade e conformidade institucional.</p>
+      </div>
+      <div class="team-card">
+        <div class="team-color-bar" style="background:var(--orange)"></div>
+        <h3>Victor César Falcão Viana</h3>
+        <span class="team-eixo-role" style="color:var(--orange)">Eixo III — Tecnologia e IA</span>
+        <p>IA generativa, automação, ciência de dados, trilhas de capacitação e LowCodeJud.</p>
+      </div>
+      <div class="team-card">
+        <div class="team-color-bar" style="background:var(--magenta)"></div>
+        <h3>Flávia Costa Barros Teixeira</h3>
+        <span class="team-eixo-role" style="color:var(--magenta)">Eixo IV — Liderança Feminina</span>
+        <p>Equidade de gênero, formação em liderança e diagnóstico institucional.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="color-divider"><span></span><span></span><span></span><span></span><span></span></div>
+
+<!-- ── CONTATO ── -->
+<section id="contato">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-tag">Fale conosco</span>
+      <h2 class="section-title">Envie sua <em>ideia</em></h2>
+      <p class="section-desc">Dúvidas, sugestões, envio de notícias ou propostas de inovação — o Inovajus é um espaço aberto.</p>
+    </div>
+
+    <div class="contact-grid reveal">
+      <div class="contact-form">
+        <h3 class="contact-form-title">Envie uma mensagem</h3>
+        <div class="form-group">
+          <label>Seu nome</label>
+          <input type="text" placeholder="Nome completo">
+        </div>
+        <div class="form-group">
+          <label>E-mail</label>
+          <input type="email" placeholder="seu.email@exemplo.com">
+        </div>
+        <div class="form-group">
+          <label>Eixo relacionado</label>
+          <select>
+            <option value="">— Selecione —</option>
+            <option>Eixo I — PJe e Automação de Fluxos</option>
+            <option>Eixo II — Segurança no Tratamento de Dados</option>
+            <option>Eixo III — IA e Tecnologia</option>
+            <option>Eixo IV — Liderança Feminina</option>
+            <option>Geral / Outro</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Mensagem</label>
+          <textarea placeholder="Descreva sua ideia, sugestão ou dúvida…"></textarea>
+        </div>
+        <button class="form-submit" onclick="this.textContent='✓ Enviado com sucesso';this.style.opacity='0.6';this.disabled=true;">
+          Enviar mensagem →
+        </button>
+      </div>
+
+      <div class="contact-aside">
+        <div class="info-card">
+          <h4>Endereço</h4>
+          <p>Justiça Federal no Ceará<br>Fortaleza — CE</p>
+        </div>
+        <div class="info-card">
+          <h4>E-mail</h4>
+          <p><a href="mailto:inovajus@jfce.jus.br">inovajus@jfce.jus.br</a></p>
+        </div>
+        <div class="info-card">
+          <h4>Links úteis</h4>
+          <p>
+            <a href="https://www.jfce.jus.br/servicos/inovacao/" target="_blank" rel="noopener">Portal de Inovação</a><br>
+            <a href="https://www.jfce.jus.br/servicos/inovacao/projetos/" target="_blank" rel="noopener">Portfólio de projetos</a><br>
+            <a href="https://inovajus-dashboard.vercel.app/" target="_blank" rel="noopener">Dashboard de atividades</a><br>
+            <a href="https://www.jfce.jus.br/servicos/inovacao/fale-conosco/" target="_blank" rel="noopener">Formulário de ideias</a>
+          </p>
+        </div>
+        <div class="info-card">
+          <h4>Fundamentação Legal</h4>
+          <p>
+            <a href="https://www.jfce.jus.br/servicos/inovacao/" target="_blank" rel="noopener">Ato de Criação do Inovajus (2019)</a><br>
+            <a href="https://www.jfce.jus.br/servicos/inovacao/" target="_blank" rel="noopener">Portaria DF nº 161/2025</a><br>
+            <a href="https://www.cjf.jus.br/cjf/corregedoria-da-justica-federal/nucleo-de-gestao-de-inovacao-estrategica/" target="_blank" rel="noopener">Plano Nacional de Inovação JF 2026</a><br>
+            <a href="https://atos.cnj.jus.br/atos/detalhar/5965" target="_blank" rel="noopener">Resolução CNJ nº 615/2025</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <!--
+        LOGO NO RODAPÉ
+        Mesma imagem logo-inovajus.png. A versão branca é gerada via CSS (filter invert).
+        Se preferir uma versão branca específica, use: logo-inovajus-white.png
+        e substitua o src abaixo.
+      -->
+      <img src="logo-inovajus.png" alt="Inovajus" class="footer-logo-img"
+           onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+      <div class="footer-logo-fallback">
+        <div class="footer-brand-name">INOVAJUS</div>
+      </div>
+      <div class="footer-brand-sub">Laboratório de Inovação da Justiça Federal no Ceará</div>
+    </div>
+    <div class="footer-links">
+      <a href="#sobre">Sobre</a>
+      <a href="#eixos">Eixos</a>
+      <a href="#projetos">Projetos</a>
+      <a href="#timeline">História</a>
+      <a href="#contato">Contato</a>
+      <a href="https://inovajus-dashboard.vercel.app/" target="_blank" rel="noopener">Dashboard ↗</a>
+    </div>
+  </div>
+  <div class="footer-copy">© 2026 INOVAJUS — Justiça Federal no Ceará · Portaria DF 161/2025</div>
+</footer>
+
+<script>
+// ── NAV SCROLL ──
+const nav = document.getElementById('main-nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 40);
+});
+
+// ── HERO REVEAL ──
+let heroRevealed = false;
+function revealHero() {
+  if (heroRevealed) return;
+  heroRevealed = true;
+  // Ativa o gradiente de fundo para legibilidade
+  document.querySelector('.hero-video-overlay').classList.add('show');
+  // Revela o conteúdo secundário
+  document.getElementById('hero-secondary').classList.add('revealed');
+  // Esconde o hint de scroll
+  document.getElementById('scroll-hint').classList.add('hidden');
+  // Mostra o cabeçalho
+  nav.classList.add('visible');
+}
+
+// Revela quando o vídeo terminar (comportamento principal)
+document.getElementById('hero-video').addEventListener('ended', revealHero);
+
+// Também revela se o usuário rolar, clicar ou pressionar tecla antes do vídeo terminar
+window.addEventListener('scroll', () => { if (window.scrollY > 8) revealHero(); }, { passive: true });
+document.getElementById('hero').addEventListener('click', revealHero);
+document.addEventListener('keydown', revealHero, { once: true });
+
+// ── ACTIVE NAV LINK ──
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.nav-links a');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => { if (window.scrollY >= s.offsetTop - 160) current = s.id; });
+  navLinks.forEach(a => {
+    a.classList.remove('active');
+    if (a.getAttribute('href') === '#' + current) a.classList.add('active');
+  });
+}, { passive: true });
+
+// ── SCROLL REVEAL ──
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.08, rootMargin: '0px 0px -48px 0px' });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// ── COUNT-UP nos números da seção Sobre ──
+function animateCount(el) {
+  const target = parseInt(el.dataset.target, 10);
+  const valEl   = el.querySelector('.num-val');
+  const duration = 1400; // ms
+  const startTime = performance.now();
+
+  function easeOutExpo(t) {
+    return t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
+  }
+
+  function step(now) {
+    const elapsed  = now - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    const current  = Math.round(easeOutExpo(progress) * target);
+    valEl.textContent = current;
+    if (progress < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+const countObserver = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting && !e.target.dataset.counted) {
+      e.target.dataset.counted = '1';
+      animateCount(e.target);
+    }
+  });
+}, { threshold: 0.5 });
+
+document.querySelectorAll('.num[data-target]').forEach(el => countObserver.observe(el));
+
+// ── SMOOTH SCROLL ──
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+</script>
+</body>
+</html>
