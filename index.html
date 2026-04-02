@@ -83,7 +83,7 @@ nav.scrolled { box-shadow: 0 4px 32px rgba(0,0,0,0.06); }
   letter-spacing: 3px; color: var(--ink);
 }
 /* Footer logo */
-.footer-logo-img { height: 28px; width: auto; display: block; margin-bottom: 6px; filter: brightness(0) invert(1); }
+.footer-logo-img { height: 48px; width: auto; display: block; margin-bottom: 6px; filter: brightness(0) invert(1); }
 .footer-logo-fallback { display: none; }
 
 .nav-links { display: flex; align-items: center; gap: 2px; }
@@ -100,6 +100,51 @@ nav.scrolled { box-shadow: 0 4px 32px rgba(0,0,0,0.06); }
   color: var(--ink-muted); border: 1px solid var(--border);
   padding: 4px 10px; border-radius: 2px;
 }
+
+/* ── HAMBURGER ── */
+.nav-hamburger {
+  display: none;
+  flex-direction: column; justify-content: center; align-items: center;
+  gap: 5px; width: 36px; height: 36px;
+  background: none; border: none; cursor: pointer; padding: 4px;
+}
+.nav-hamburger span {
+  display: block; width: 22px; height: 1.5px;
+  background: var(--ink); border-radius: 2px;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  transform-origin: center;
+}
+.nav-hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+.nav-hamburger.open span:nth-child(2) { opacity: 0; }
+.nav-hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+/* Mobile nav drawer */
+.nav-mobile-menu {
+  display: none;
+  position: fixed; top: 60px; left: 0; right: 0;
+  background: rgba(255,255,255,0.98);
+  backdrop-filter: blur(16px) saturate(180%);
+  border-bottom: 1px solid var(--border);
+  z-index: 999;
+  padding: 16px 20px 24px;
+  flex-direction: column; gap: 2px;
+  opacity: 0; transform: translateY(-8px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  pointer-events: none;
+}
+.nav-mobile-menu.open {
+  opacity: 1; transform: translateY(0);
+  pointer-events: auto;
+}
+.nav-mobile-menu a {
+  display: block; padding: 12px 8px;
+  font-family: var(--font-sans); font-size: 14px; font-weight: 500;
+  color: var(--ink-sub); text-decoration: none;
+  border-bottom: 1px solid var(--border);
+  transition: color 0.2s;
+}
+.nav-mobile-menu a:last-child { border-bottom: none; }
+.nav-mobile-menu a:hover, .nav-mobile-menu a.active { color: var(--magenta); }
 
 /* ── HERO ── */
 .hero {
@@ -502,6 +547,8 @@ footer { background: var(--ink); color: rgba(255,255,255,0.45); padding: 48px; }
   nav { padding: 0 20px; }
   .nav-links { display: none; }
   .nav-badge { display: none; }
+  .nav-hamburger { display: flex; }
+  .nav-mobile-menu { display: flex; }
   section { padding: 64px 20px; }
   .hero-secondary { padding: 24px 20px 48px; }
   .eixos-grid { grid-template-columns: 1fr; }
@@ -544,7 +591,21 @@ footer { background: var(--ink); color: rgba(255,255,255,0.45); padding: 48px; }
     <a href="#contato">Contato</a>
   </div>
   <span class="nav-badge">Rede de Inovação — JF5</span>
+  <button class="nav-hamburger" id="nav-hamburger" aria-label="Abrir menu">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+
+<!-- Mobile menu drawer -->
+<div class="nav-mobile-menu" id="nav-mobile-menu">
+  <a href="#hero"     class="active">Início</a>
+  <a href="#sobre">Sobre</a>
+  <a href="#eixos">Eixos</a>
+  <a href="#projetos">Projetos</a>
+  <a href="#timeline">História</a>
+  <a href="#equipe">Equipe</a>
+  <a href="#contato">Contato</a>
+</div>
 
 <!-- ── HERO ── -->
 <section class="hero" id="hero">
@@ -1087,6 +1148,20 @@ document.getElementById('hero-video').addEventListener('ended', revealHero);
 window.addEventListener('scroll', () => { if (window.scrollY > 8) revealHero(); }, { passive: true });
 document.getElementById('hero').addEventListener('click', revealHero);
 document.addEventListener('keydown', revealHero, { once: true });
+
+// ── HAMBURGER MENU ──
+const hamburger = document.getElementById('nav-hamburger');
+const mobileMenu = document.getElementById('nav-mobile-menu');
+hamburger.addEventListener('click', () => {
+  const isOpen = mobileMenu.classList.toggle('open');
+  hamburger.classList.toggle('open', isOpen);
+});
+mobileMenu.querySelectorAll('a').forEach(link => {
+  link.addEventListener('click', () => {
+    mobileMenu.classList.remove('open');
+    hamburger.classList.remove('open');
+  });
+});
 
 // ── ACTIVE NAV LINK ──
 const sections = document.querySelectorAll('section[id]');
