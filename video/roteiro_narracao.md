@@ -56,11 +56,11 @@ Os tempos de cena, as animações e as legendas se ajustam automaticamente à du
 
 14. E no Lab Low Code, os próprios servidores criam automações, formulários e aplicações, com baixo código e inteligência artificial generativa.
 
-### Jornada do segurado
+### Jornada do jurisdicionado (previsto para novembro de 2026)
 
-15. Em linguagem simples, reduzimos as barreiras de comunicação com o segurado, tornando compreensíveis as etapas e os atos das ações previdenciárias.
+15. Em linguagem simples, vamos reduzir as barreiras de comunicação com o jurisdicionado, tornando compreensíveis as etapas e os atos das ações previdenciárias.
 
-16. Uma simulação imersiva da jornada do segurado, em estações, com alternância de papéis e relatos reais anonimizados, deu origem a um guia de respostas às dúvidas mais frequentes.
+16. Previsto para novembro de 2026, o projeto fará uma simulação imersiva da jornada do jurisdicionado, em estações, com alternância de papéis e relatos reais anonimizados, e criará um guia de respostas às dúvidas mais frequentes.
 
 ### Projetos
 
