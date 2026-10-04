@@ -34,19 +34,19 @@
   ],
   "J": [
    114.608,
-   138.074
+   142.49
   ],
   "F": [
-   138.074,
-   144.53133333333332
+   142.49,
+   148.94733333333332
   ],
   "G": [
-   144.53133333333332,
-   151.38199999999998
+   148.94733333333332,
+   155.79799999999997
   ],
   "H": [
-   151.38199999999998,
-   158.38199999999998
+   155.79799999999997,
+   162.79799999999997
   ]
  },
  "lines": {
@@ -164,33 +164,33 @@
   },
   "j1": {
    "start": 115.608,
-   "dur": 9.194666666666667,
-   "s0": 115.63841666666667,
-   "s1": 124.673,
-   "tts": "Em linguagem simples, reduzimos as barreiras de comunicação com o segurado, tornando compreensíveis as etapas e os atos das ações previdenciárias.",
-   "text": "Em linguagem simples, reduzimos as barreiras de comunicação com o segurado, tornando compreensíveis as etapas e os atos das ações previdenciárias."
+   "dur": 9.834666666666667,
+   "s0": 115.638125,
+   "s1": 125.32162500000001,
+   "tts": "Em linguagem simples, vamos reduzir as barreiras de comunicação com o jurisdicionado, tornando compreensíveis as etapas e os atos das ações previdenciárias.",
+   "text": "Em linguagem simples, vamos reduzir as barreiras de comunicação com o jurisdicionado, tornando compreensíveis as etapas e os atos das ações previdenciárias."
   },
   "j2": {
-   "start": 125.35266666666666,
-   "dur": 11.221333333333334,
-   "s0": 125.38420833333333,
-   "s1": 136.45108333333334,
-   "tts": "Uma simulação imersiva da jornada do segurado, em estações, com alternância de papéis e relatos reais anonimizados, deu origem a um guia de respostas às dúvidas mais frequentes.",
-   "text": "Uma simulação imersiva da jornada do segurado, em estações, com alternância de papéis e relatos reais anonimizados, deu origem a um guia de respostas às dúvidas mais frequentes."
+   "start": 125.99266666666668,
+   "dur": 14.997333333333334,
+   "s0": 126.03687500000001,
+   "s1": 140.86670833333335,
+   "tts": "Previsto para novembro de dois mil e vinte e seis, o projeto fará uma simulação imersiva da jornada do jurisdicionado, em estações, com alternância de papéis e relatos reais anonimizados, e criará um guia de respostas às dúvidas mais frequentes.",
+   "text": "Previsto para novembro de 2026, o projeto fará uma simulação imersiva da jornada do jurisdicionado, em estações, com alternância de papéis e relatos reais anonimizados, e criará um guia de respostas às dúvidas mais frequentes."
   },
   "f1": {
-   "start": 138.774,
+   "start": 143.19,
    "dur": 4.757333333333333,
-   "s0": 138.82391666666666,
-   "s1": 143.38370833333335,
+   "s0": 143.23991666666666,
+   "s1": 147.79970833333334,
    "tts": "Do Mandado Cidadão ao Teatro Pop Rua, levamos inovação a quem mais precisa.",
    "text": "Do Mandado Cidadão ao Teatro PopRua, levamos inovação a quem mais precisa."
   },
   "g1": {
-   "start": 145.53133333333332,
+   "start": 149.94733333333332,
    "dur": 4.650666666666667,
-   "s0": 145.56275,
-   "s1": 149.96633333333332,
+   "s0": 149.97875,
+   "s1": 154.38233333333332,
    "tts": "Inovajus. Uma Justiça mais eficiente, acessível e centrada nas pessoas.",
    "text": "Inovajus. Uma Justiça mais eficiente, acessível e centrada nas pessoas."
   }
@@ -297,36 +297,36 @@
    "formulários e aplicações, com baixo código e inteligência artificial generativa."
   ],
   [
-   115.55841666666667,
-   120.48145833333334,
-   "Em linguagem simples, reduzimos as barreiras de comunicação com o segurado,"
+   115.558125,
+   121.10841666666667,
+   "Em linguagem simples, vamos reduzir as barreiras de comunicação com o jurisdicionado,"
   ],
   [
-   120.48145833333334,
-   124.923,
+   121.10841666666667,
+   125.57162500000001,
    "tornando compreensíveis as etapas e os atos das ações previdenciárias."
   ],
   [
-   125.30420833333334,
-   130.349,
-   "Uma simulação imersiva da jornada do segurado, em estações, com alternância de papéis"
+   125.95687500000001,
+   132.99883333333335,
+   "Previsto para novembro de 2026, o projeto fará uma simulação imersiva da jornada do jurisdicionado, em estações,"
   ],
   [
-   130.349,
-   136.70108333333334,
-   "e relatos reais anonimizados, deu origem a um guia de respostas às dúvidas mais frequentes."
+   132.99883333333335,
+   141.11670833333335,
+   "com alternância de papéis e relatos reais anonimizados, e criará um guia de respostas às dúvidas mais frequentes."
   ],
   [
-   138.74391666666665,
-   143.63370833333335,
+   143.15991666666665,
+   148.04970833333334,
    "Do Mandado Cidadão ao Teatro PopRua, levamos inovação a quem mais precisa."
   ],
   [
-   145.48274999999998,
-   150.21633333333332,
+   149.89874999999998,
+   154.63233333333332,
    "Inovajus. Uma Justiça mais eficiente, acessível e centrada nas pessoas."
   ]
  ],
- "total": 158.38199999999998,
+ "total": 162.79799999999997,
  "body0": 7.2
 }

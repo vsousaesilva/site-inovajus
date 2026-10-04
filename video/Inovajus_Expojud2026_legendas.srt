@@ -79,25 +79,25 @@ E no Lab Low Code, os próprios servidores criam automações,
 formulários e aplicações, com baixo código e inteligência artificial generativa.
 
 21
-00:01:55,558 --> 00:02:00,481
-Em linguagem simples, reduzimos as barreiras de comunicação com o segurado,
+00:01:55,558 --> 00:02:01,108
+Em linguagem simples, vamos reduzir as barreiras de comunicação com o jurisdicionado,
 
 22
-00:02:00,481 --> 00:02:04,923
+00:02:01,108 --> 00:02:05,572
 tornando compreensíveis as etapas e os atos das ações previdenciárias.
 
 23
-00:02:05,304 --> 00:02:10,349
-Uma simulação imersiva da jornada do segurado, em estações, com alternância de papéis
+00:02:05,957 --> 00:02:12,999
+Previsto para novembro de 2026, o projeto fará uma simulação imersiva da jornada do jurisdicionado, em estações,
 
 24
-00:02:10,349 --> 00:02:16,701
-e relatos reais anonimizados, deu origem a um guia de respostas às dúvidas mais frequentes.
+00:02:12,999 --> 00:02:21,117
+com alternância de papéis e relatos reais anonimizados, e criará um guia de respostas às dúvidas mais frequentes.
 
 25
-00:02:18,744 --> 00:02:23,634
+00:02:23,160 --> 00:02:28,050
 Do Mandado Cidadão ao Teatro PopRua, levamos inovação a quem mais precisa.
 
 26
-00:02:25,483 --> 00:02:30,216
+00:02:29,899 --> 00:02:34,632
 Inovajus. Uma Justiça mais eficiente, acessível e centrada nas pessoas.
