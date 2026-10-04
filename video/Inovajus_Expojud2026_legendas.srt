@@ -3,49 +3,101 @@
 Este é o Inovajus, o Laboratório de Inovação da Justiça Federal no Ceará.
 
 2
-00:00:13,975 --> 00:00:20,157
+00:00:13,990 --> 00:00:20,172
 Desde 2019, transformamos a cultura institucional com método, ciência e humanização.
 
 3
-00:00:21,158 --> 00:00:27,135
-São mais de 150 servidores capacitados, 11 projetos e 4 eixos de atuação.
+00:00:21,131 --> 00:00:28,681
+São mais de 200 servidores multiplicadores em inteligência artificial, 11 projetos e 4 eixos de atuação.
 
 4
-00:00:28,991 --> 00:00:31,540
+00:00:30,346 --> 00:00:32,896
 PJe e Automação de Fluxos.
 
 5
-00:00:31,855 --> 00:00:34,490
+00:00:33,200 --> 00:00:35,834
 Segurança no Tratamento de Dados.
 
 6
-00:00:34,758 --> 00:00:37,489
+00:00:36,135 --> 00:00:38,866
 Tecnologia e Inteligência Artificial.
 
 7
-00:00:37,854 --> 00:00:43,489
+00:00:39,212 --> 00:00:44,847
 E o novo Eixo de Linguagem Simples e Acessibilidade, que aproxima a Justiça do cidadão.
 
 8
-00:00:45,753 --> 00:00:50,307
-No Laboratório de Fluxos do PJe, automatizamos peças repetitivas
+00:00:47,293 --> 00:00:52,195
+No eixo do PJe, o Laboratório de Fluxos automatiza peças repetitivas
 
 9
-00:00:50,307 --> 00:00:54,097
-e redesenhamos fluxos processuais, com alcance nacional.
+00:00:52,195 --> 00:00:55,705
+e redesenha fluxos processuais, com alcance nacional.
 
 10
-00:00:56,954 --> 00:01:00,698
-E no Lab Low Code, os próprios servidores criam automações,
+00:00:57,852 --> 00:01:01,182
+Já a Oficina Protocolo Certo ensina advogadas e advogados
 
 11
-00:01:00,698 --> 00:01:06,931
-formulários inteligentes e aplicações, com baixo código e inteligência artificial generativa.
+00:01:01,182 --> 00:01:05,000
+a protocolar corretamente um processo no PJe.
 
 12
-00:01:09,970 --> 00:01:14,860
-Do Mandado Cidadão ao Teatro PopRua, levamos inovação a quem mais precisa.
+00:01:07,232 --> 00:01:11,427
+Na proteção de dados, apoiamos uma consultoria especializada
 
 13
-00:01:16,951 --> 00:01:21,685
+00:01:11,427 --> 00:01:14,309
+no desenvolvimento de soluções e instrumentos
+
+14
+00:01:14,499 --> 00:01:18,842
+que fortalecem a governança de dados pessoais da JFCE
+
+15
+00:01:18,842 --> 00:01:21,528
+e a cultura de conscientização institucional.
+
+16
+00:01:23,983 --> 00:01:30,416
+Em tecnologia, o curso Servidor + IA já formou mais de 200 servidores multiplicadores.
+
+17
+00:01:30,838 --> 00:01:35,844
+Com foco na área-fim, a formação oferece estratégias institucionais e validadas
+
+18
+00:01:35,844 --> 00:01:42,007
+para o uso da inteligência artificial: dos fundamentos à prática forense, com ética e governança.
+
+19
+00:01:44,344 --> 00:01:47,957
+E no Lab Low Code, os próprios servidores criam automações,
+
+20
+00:01:47,957 --> 00:01:53,445
+formulários e aplicações, com baixo código e inteligência artificial generativa.
+
+21
+00:01:55,558 --> 00:02:00,481
+Em linguagem simples, reduzimos as barreiras de comunicação com o segurado,
+
+22
+00:02:00,481 --> 00:02:04,923
+tornando compreensíveis as etapas e os atos das ações previdenciárias.
+
+23
+00:02:05,304 --> 00:02:10,349
+Uma simulação imersiva da jornada do segurado, em estações, com alternância de papéis
+
+24
+00:02:10,349 --> 00:02:16,701
+e relatos reais anonimizados, deu origem a um guia de respostas às dúvidas mais frequentes.
+
+25
+00:02:18,744 --> 00:02:23,634
+Do Mandado Cidadão ao Teatro PopRua, levamos inovação a quem mais precisa.
+
+26
+00:02:25,483 --> 00:02:30,216
 Inovajus. Uma Justiça mais eficiente, acessível e centrada nas pessoas.

@@ -1,0 +1,110 @@
+[
+ {
+  "id": "a1",
+  "scene": "A",
+  "text": "Este é o Inovajus, o Laboratório de Inovação da Justiça Federal no Ceará.",
+  "tts": "Este é o Inovajus, o Laboratório de Inovação da Justiça Federal no Ceará."
+ },
+ {
+  "id": "a2",
+  "scene": "A",
+  "text": "Desde 2019, transformamos a cultura institucional com método, ciência e humanização.",
+  "tts": "Desde dois mil e dezenove, transformamos a cultura institucional com método, ciência e humanização."
+ },
+ {
+  "id": "b1",
+  "scene": "B",
+  "text": "São mais de 200 servidores multiplicadores em inteligência artificial, 11 projetos e 4 eixos de atuação.",
+  "tts": "São mais de duzentos servidores multiplicadores em inteligência artificial, onze projetos e quatro eixos de atuação."
+ },
+ {
+  "id": "c1",
+  "scene": "C",
+  "text": "PJe e Automação de Fluxos.",
+  "tts": "Pê Jota É, e Automação de Fluxos."
+ },
+ {
+  "id": "c2",
+  "scene": "C",
+  "text": "Segurança no Tratamento de Dados.",
+  "tts": "Segurança no Tratamento de Dados."
+ },
+ {
+  "id": "c3",
+  "scene": "C",
+  "text": "Tecnologia e Inteligência Artificial.",
+  "tts": "Tecnologia e Inteligência Artificial."
+ },
+ {
+  "id": "c4",
+  "scene": "C",
+  "text": "E o novo Eixo de Linguagem Simples e Acessibilidade, que aproxima a Justiça do cidadão.",
+  "tts": "E o novo eixo de Linguagem Simples e Acessibilidade, que aproxima a Justiça do cidadão."
+ },
+ {
+  "id": "d1",
+  "scene": "D",
+  "text": "No eixo do PJe, o Laboratório de Fluxos automatiza peças repetitivas|e redesenha fluxos processuais, com alcance nacional.",
+  "tts": "No eixo do Pê Jota É, o Laboratório de Fluxos automatiza peças repetitivas e redesenha fluxos processuais, com alcance nacional."
+ },
+ {
+  "id": "p1",
+  "scene": "P",
+  "text": "Já a Oficina Protocolo Certo ensina advogadas e advogados|a protocolar corretamente um processo no PJe.",
+  "tts": "Já a Oficina Protocolo Certo ensina advogadas e advogados a protocolar corretamente um processo no Pê Jota É."
+ },
+ {
+  "id": "l1",
+  "scene": "L",
+  "text": "Na proteção de dados, apoiamos uma consultoria especializada|no desenvolvimento de soluções e instrumentos",
+  "tts": "Na proteção de dados, apoiamos uma consultoria especializada no desenvolvimento de soluções e instrumentos"
+ },
+ {
+  "id": "l2",
+  "scene": "L",
+  "text": "que fortalecem a governança de dados pessoais da JFCE|e a cultura de conscientização institucional.",
+  "tts": "que fortalecem a governança de dados pessoais da Justiça Federal e a cultura de conscientização institucional."
+ },
+ {
+  "id": "s1",
+  "scene": "S",
+  "text": "Em tecnologia, o curso Servidor + IA já formou mais de 200 servidores multiplicadores.",
+  "tts": "Em tecnologia, o curso Servidor mais iá, já formou mais de duzentos servidores multiplicadores."
+ },
+ {
+  "id": "s2",
+  "scene": "S",
+  "text": "Com foco na área-fim, a formação oferece estratégias institucionais e validadas|para o uso da inteligência artificial: dos fundamentos à prática forense, com ética e governança.",
+  "tts": "Com o foco na área fim, a formação oferece estratégias institucionais e validadas para o uso da inteligência artificial: dos fundamentos à prática forense, com ética e governança."
+ },
+ {
+  "id": "e1",
+  "scene": "E",
+  "text": "E no Lab Low Code, os próprios servidores criam automações,|formulários e aplicações, com baixo código e inteligência artificial generativa.",
+  "tts": "E no Lab Lou Coud, os próprios servidores criam automações, formulários e aplicações, com baixo código e inteligência artificial generativa."
+ },
+ {
+  "id": "j1",
+  "scene": "J",
+  "text": "Em linguagem simples, reduzimos as barreiras de comunicação com o segurado,|tornando compreensíveis as etapas e os atos das ações previdenciárias.",
+  "tts": "Em linguagem simples, reduzimos as barreiras de comunicação com o segurado, tornando compreensíveis as etapas e os atos das ações previdenciárias."
+ },
+ {
+  "id": "j2",
+  "scene": "J",
+  "text": "Uma simulação imersiva da jornada do segurado, em estações, com alternância de papéis|e relatos reais anonimizados, deu origem a um guia de respostas às dúvidas mais frequentes.",
+  "tts": "Uma simulação imersiva da jornada do segurado, em estações, com alternância de papéis e relatos reais anonimizados, deu origem a um guia de respostas às dúvidas mais frequentes."
+ },
+ {
+  "id": "f1",
+  "scene": "F",
+  "text": "Do Mandado Cidadão ao Teatro PopRua, levamos inovação a quem mais precisa.",
+  "tts": "Do Mandado Cidadão ao Teatro Pop Rua, levamos inovação a quem mais precisa."
+ },
+ {
+  "id": "g1",
+  "scene": "G",
+  "text": "Inovajus. Uma Justiça mais eficiente, acessível e centrada nas pessoas.",
+  "tts": "Inovajus. Uma Justiça mais eficiente, acessível e centrada nas pessoas."
+ }
+]

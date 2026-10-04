@@ -1,0 +1,493 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<link rel="stylesheet" href="fonts.local.css">
+<script src="timing.js"></script>
+<style>
+:root{--magenta:#D41876;--green:#7AB648;--blue:#00A0E3;--orange:#F7941D;--purple:#9B3A8E;--ink:#121212;--sub:#484848;--muted:#8a8a8a;--border:#E6E6E2;--ia:#FF8A3D;
+--serif:'Cormorant Garamond',Georgia,serif;--sans:'Plus Jakarta Sans',sans-serif;--mono:'JetBrains Mono',monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{font-variant-numeric:lining-nums;width:1920px;height:1080px;overflow:hidden;background:#fff;font-family:var(--sans);color:var(--ink);-webkit-font-smoothing:antialiased}
+#stage{position:absolute;inset:0;overflow:hidden;background:radial-gradient(ellipse 120% 90% at 50% 40%,#ffffff 55%,#f6f6f3 100%)}
+.abs{position:absolute}
+.scene{position:absolute;inset:0;opacity:0;visibility:hidden}
+.tag{font-family:var(--mono);font-size:19px;letter-spacing:5px;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:16px}
+.tag::before{content:'';width:42px;height:2px;background:currentColor;display:block}
+.title{font-variant-numeric:lining-nums;font-family:var(--serif);font-weight:500;color:var(--ink);letter-spacing:-1px;line-height:1.02}
+.title em{font-style:italic;color:var(--magenta)}
+.word{display:inline-block}
+.mask{display:inline-block;overflow:hidden;vertical-align:bottom;padding-bottom:.12em;margin-bottom:-.12em}
+.lead{font-size:36px;line-height:1.38;color:var(--sub)}
+.lead b{color:var(--ink);font-weight:600}
+#topbar{position:absolute;left:0;top:0;width:100%;height:8px;display:flex;z-index:20}
+#topbar span{flex:1;transform-origin:left}
+#brand{position:absolute;left:72px;top:46px;font-family:var(--mono);font-size:17px;letter-spacing:4px;color:#9a9a9a;text-transform:uppercase;z-index:20}
+#brand b{color:var(--ink);font-weight:500}
+#sub{position:absolute;left:0;right:0;margin:0 auto;width:fit-content;bottom:58px;max-width:1600px;text-align:center;z-index:30;
+ background:rgba(18,18,18,.86);color:#fff;font-weight:600;font-size:42px;line-height:1.32;padding:16px 34px 18px;border-radius:16px;opacity:0;text-wrap:balance;
+ box-shadow:0 10px 40px rgba(0,0,0,.12);border:1.5px solid rgba(255,255,255,.08)}
+.bub{position:absolute}
+.pill{display:inline-flex;align-items:center;gap:14px;font-size:34px;font-weight:600;padding:16px 34px;border-radius:999px;color:#fff}
+.num-col{position:absolute;top:330px;width:500px;text-align:center}
+.num-col .bar{height:6px;border-radius:3px;margin:0 auto 34px;width:0}
+.num-col .n{font-family:var(--serif);font-weight:500;font-size:230px;line-height:.9;letter-spacing:-4px}
+.num-col .l{font-size:34px;color:var(--sub);margin-top:22px;font-weight:500}
+.card{position:absolute;background:#fff;border:1.5px solid var(--border);border-radius:22px;box-shadow:0 18px 50px rgba(0,0,0,.06);overflow:hidden;padding:40px 36px}
+.card .cbar{position:absolute;left:0;top:0;height:100%;width:9px}
+.card .lab{font-family:var(--mono);font-size:18px;letter-spacing:4px;font-weight:500;margin-bottom:22px}
+.card h3{font-family:var(--serif);font-weight:600;font-size:44px;line-height:1.05;letter-spacing:-.5px;margin-bottom:18px}
+.card p{font-size:21px;line-height:1.5;color:var(--sub)}
+.badge{display:inline-block;background:var(--magenta);color:#fff;font-family:var(--mono);font-size:16px;letter-spacing:3px;padding:7px 14px;border-radius:999px;margin-left:12px;vertical-align:middle}
+.chip{display:inline-flex;align-items:center;gap:12px;border:2px solid currentColor;border-radius:999px;padding:12px 24px;font-size:25px;font-weight:600;margin:0 12px 14px 0;background:#fff}
+.chip i{width:12px;height:12px;border-radius:50%;background:currentColor;display:block}
+.check{display:flex;align-items:center;gap:24px;font-size:36px;font-weight:500;color:var(--ink);margin-bottom:30px}
+.check .ck{width:54px;height:54px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:none}
+.node{position:absolute;width:250px;height:96px;border-radius:20px;border:2.5px solid #d6dde3;background:#fff;display:flex;align-items:center;justify-content:center;font-size:25px;font-weight:600;color:var(--sub);box-shadow:0 10px 30px rgba(0,0,0,.05)}
+.node .auto{position:absolute;top:-16px;right:-14px;background:var(--green);color:#fff;font-size:14px;font-family:var(--mono);letter-spacing:2px;padding:6px 10px;border-radius:999px;opacity:0}
+.win{position:absolute;background:#fff;border-radius:22px;border:1.5px solid var(--border);box-shadow:0 30px 80px rgba(0,0,0,.10);overflow:hidden}
+.win .wbar{height:52px;background:#F4F4F1;display:flex;align-items:center;gap:10px;padding:0 22px;border-bottom:1.5px solid var(--border)}
+.win .wbar i{width:14px;height:14px;border-radius:50%;display:block}
+.win .wbar span{margin-left:18px;font-family:var(--mono);font-size:16px;color:#999;letter-spacing:1px}
+.blk{position:absolute;border-radius:12px}
+.sk{height:16px;border-radius:8px;background:#ececE8;margin-bottom:16px}
+.fld{height:58px;border:2px solid #dedeD9;border-radius:12px;margin-bottom:18px;display:flex;align-items:center;padding:0 20px;font-size:21px;color:#9a9a9a}
+.pcard{position:absolute;top:0;width:330px;height:210px;background:#fff;border:1.5px solid var(--border);border-radius:20px;padding:30px 28px;box-shadow:0 14px 40px rgba(0,0,0,.05);overflow:hidden}
+.pcard .pb{position:absolute;left:0;top:0;width:100%;height:8px}
+.pcard h4{font-family:var(--serif);font-size:38px;font-weight:600;line-height:1.05;margin:10px 0 14px;letter-spacing:-.3px}
+.pcard span{font-family:var(--mono);font-size:15px;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}
+.ocard{position:absolute;width:330px;background:#fff;border:1.5px solid var(--border);border-radius:20px;padding:24px 26px;box-shadow:0 16px 44px rgba(0,0,0,.07);display:flex;gap:18px;align-items:center}
+.ocard .oi{width:58px;height:58px;border-radius:16px;flex:none;display:flex;align-items:center;justify-content:center}
+.ocard b{font-size:25px;font-weight:600;line-height:1.25}
+/* dark IA scene */
+#S{background:#0a0a0a}
+#S .tag{color:#b9b9b9}
+.mod{position:absolute;text-align:center;width:300px;margin-left:-150px}
+.mod .mc{width:96px;height:96px;border-radius:50%;margin:0 auto;border:2.5px solid rgba(255,138,61,.75);background:#2a1a10;display:flex;align-items:center;justify-content:center;font-size:40px;font-weight:800;color:var(--ia);box-shadow:0 0 0 rgba(255,138,61,0)}
+.mod .mt{font-size:30px;font-weight:700;color:#fff;margin-bottom:16px;white-space:nowrap}
+.mod .mh{font-size:21px;color:#9d9d9d;margin-top:14px;white-space:nowrap}
+.ichip{display:inline-flex;align-items:center;gap:12px;border:2px solid rgba(255,138,61,.6);color:#ffd7bd;border-radius:999px;padding:12px 26px;font-size:27px;font-weight:600;margin-right:16px;background:rgba(255,138,61,.08)}
+.ichip i{width:11px;height:11px;border-radius:50%;background:var(--ia);display:block}
+/* journey */
+.st{position:absolute;width:74px;height:74px;margin:-37px 0 0 -37px;border-radius:50%;background:#fff;border:3px solid #e9c3d6;display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:800;color:#c9a0b5}
+.st span{position:absolute;top:86px;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:15px;letter-spacing:2px;color:var(--muted);white-space:nowrap}
+.fb{position:absolute;display:flex;align-items:center;gap:14px;background:#fff;border:1.5px solid var(--border);border-radius:16px;padding:14px 22px 14px 14px;font-size:24px;font-weight:600;box-shadow:0 14px 40px rgba(0,0,0,.08);white-space:nowrap}
+.fb .fi{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex:none}
+#H{background:#fff}
+.lp{position:absolute;mix-blend-mode:multiply}
+</style></head>
+<body><div id="stage">
+<div id="bubbles"></div>
+
+<!-- A -->
+<div class="scene" id="A">
+ <div class="abs" id="A_box" style="left:0;right:0;top:250px;text-align:center">
+  <div class="tag" id="A_tag" style="justify-content:center">Quem somos</div>
+  <div class="title" id="A_title" style="font-size:150px;margin-top:34px"></div>
+  <div id="A_subt" style="font-size:40px;color:var(--sub);margin-top:30px">O Laboratório de Inovação da <b style="font-weight:600;color:var(--ink)">Justiça Federal no Ceará</b></div>
+  <div id="A_since" style="margin-top:46px;display:flex;align-items:center;justify-content:center;gap:26px">
+   <span id="A_l1" style="height:2px;width:160px;background:#d0d0ca;transform-origin:right"></span>
+   <span style="font-family:var(--serif);font-style:italic;font-size:46px">desde <b style="font-weight:600;font-style:normal">2019</b></span>
+   <span id="A_l2" style="height:2px;width:160px;background:#d0d0ca;transform-origin:left"></span>
+  </div>
+  <div style="margin-top:44px;display:flex;justify-content:center;gap:26px">
+   <span class="pill" id="A_p1" style="background:var(--blue)">Método</span><span class="pill" id="A_p2" style="background:var(--green)">Ciência</span><span class="pill" id="A_p3" style="background:var(--magenta)">Humanização</span>
+  </div>
+ </div>
+</div>
+
+<!-- B -->
+<div class="scene" id="B">
+ <div class="tag abs" id="B_tag" style="left:0;right:0;top:190px;justify-content:center">Em números</div>
+ <div class="num-col" id="B_c1" style="left:130px"><div class="bar" style="background:var(--orange)"></div><div class="n"><span class="v">0</span><span style="color:var(--orange)">+</span></div><div class="l">multiplicadores em IA</div></div>
+ <div class="num-col" id="B_c2" style="left:710px"><div class="bar" style="background:var(--green)"></div><div class="n"><span class="v">0</span><span style="color:var(--green)">+</span></div><div class="l">projetos</div></div>
+ <div class="num-col" id="B_c3" style="left:1290px"><div class="bar" style="background:var(--magenta)"></div><div class="n"><span class="v">0</span></div><div class="l">eixos de atuação</div></div>
+</div>
+
+<!-- C -->
+<div class="scene" id="C">
+ <div class="abs" id="C_head" style="left:140px;top:120px"><div class="tag">Frentes de atuação</div><div class="title" style="font-size:104px;margin-top:20px">Nossos <em>Eixos</em></div></div>
+ <div class="card" id="C_1"><div class="cbar" style="background:var(--blue)"></div><div class="lab" style="color:var(--blue)">EIXO I</div><h3>PJe e Automação de Fluxos</h3><p>Automação de fluxos processuais e capacitação.</p></div>
+ <div class="card" id="C_2"><div class="cbar" style="background:var(--green)"></div><div class="lab" style="color:var(--green)">EIXO II</div><h3>Segurança no Tratamento de Dados</h3><p>Governança de dados pessoais e LGPD.</p></div>
+ <div class="card" id="C_3"><div class="cbar" style="background:var(--orange)"></div><div class="lab" style="color:var(--orange)">EIXO III</div><h3>Tecnologia e Inteligência Artificial</h3><p>IA generativa, automação e capacitação.</p></div>
+ <div class="card" id="C_4"><div class="cbar" style="background:var(--magenta)"></div>
+  <div class="lab" style="color:var(--magenta)">EIXO IV <span class="badge" id="C_new">NOVO</span></div>
+  <h3 id="C_4h">Linguagem Simples e Acessibilidade</h3><p id="C_4p">Comunicação clara e inclusão para todas as pessoas.</p>
+  <div id="C_4x" style="position:absolute;left:56px;right:56px;bottom:52px">
+   <div style="font-family:var(--mono);font-size:17px;letter-spacing:3px;color:var(--muted);margin-bottom:22px">PORTARIA DA DIREÇÃO DO FORO Nº 139/2026</div>
+   <div id="C_chips"><span class="chip" style="color:var(--magenta)"><i></i>Linguagem simples</span><span class="chip" style="color:var(--blue)"><i></i>Libras</span><span class="chip" style="color:var(--green)"><i></i>Audiodescrição</span><span class="chip" style="color:var(--orange)"><i></i>Leitura fácil</span><span class="chip" style="color:var(--purple)"><i></i>Acessibilidade digital</span></div>
+  </div>
+ </div>
+</div>
+
+<!-- D: Lab de Fluxos -->
+<div class="scene" id="D">
+ <div class="abs" id="D_text" style="left:130px;top:170px;width:820px">
+  <div class="tag" style="color:var(--blue)">Destaque · Eixo I</div>
+  <div class="title" style="font-size:108px;margin-top:26px">Laboratório<br>de Fluxos <em style="color:var(--blue)">do PJe</em></div>
+  <div style="margin-top:56px">
+   <div class="check" id="D_k1"><span class="ck" style="background:var(--blue)"><svg width="26" height="26" viewBox="0 0 26 26"><path d="M5 13.5l5 5 11-12" stroke="#fff" stroke-width="3.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Automação de peças repetitivas</div>
+   <div class="check" id="D_k2"><span class="ck" style="background:var(--blue)"><svg width="26" height="26" viewBox="0 0 26 26"><path d="M5 13.5l5 5 11-12" stroke="#fff" stroke-width="3.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Redesenho de fluxos processuais</div>
+   <div class="check" id="D_k3"><span class="ck" style="background:var(--blue)"><svg width="26" height="26" viewBox="0 0 26 26"><path d="M5 13.5l5 5 11-12" stroke="#fff" stroke-width="3.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Alcance nacional</div>
+  </div>
+ </div>
+ <div class="abs" id="D_flow" style="left:1010px;top:150px;width:800px;height:760px">
+  <svg class="abs" style="left:0;top:0" width="800" height="760"><path d="M135 98 H665 V378 H135 V658 H665" fill="none" stroke="#cfe8f6" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+   <path id="D_path2" d="M135 98 H665 V378 H135 V658 H665" fill="none" stroke="#00A0E3" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+   <circle id="D_dotg" r="34" fill="#00A0E3" opacity=".18"/><circle id="D_dot" r="15" fill="#00A0E3"/></svg>
+  <div class="node" id="D_n0" style="left:10px;top:50px">Distribuição<span class="auto">AUTO</span></div>
+  <div class="node" id="D_n1" style="left:540px;top:50px">Triagem<span class="auto">AUTO</span></div>
+  <div class="node" id="D_n2" style="left:540px;top:330px">Minuta<span class="auto">AUTO</span></div>
+  <div class="node" id="D_n3" style="left:10px;top:330px">Assinatura<span class="auto">AUTO</span></div>
+  <div class="node" id="D_n4" style="left:10px;top:610px">Intimação<span class="auto">AUTO</span></div>
+  <div class="node" id="D_n5" style="left:540px;top:610px">Cumprimento<span class="auto">AUTO</span></div>
+ </div>
+</div>
+
+<!-- P: Protocolo Certo -->
+<div class="scene" id="P">
+ <div class="abs" id="P_text" style="left:130px;top:180px;width:800px">
+  <div class="tag" style="color:var(--blue)">Destaque · Eixo I</div>
+  <div class="title" style="font-size:112px;margin-top:26px">Oficina<br><em style="color:var(--blue)">Protocolo Certo</em></div>
+  <div id="P_aud" style="margin-top:40px;display:inline-flex;align-items:center;gap:16px;border:2px solid var(--blue);color:#0b6f9e;border-radius:999px;padding:14px 28px 14px 18px;font-size:30px;font-weight:600">
+   <svg width="40" height="40" viewBox="0 0 40 40"><circle cx="14" cy="13" r="6" fill="#00A0E3"/><circle cx="27" cy="15" r="5" fill="#7cc8ee"/><path d="M3 33c0-7 5-11 11-11s11 4 11 11z" fill="#00A0E3"/><path d="M21 33c1-6 3-9 7-9 5 0 9 3 9 9z" fill="#7cc8ee"/></svg>
+   Para advogadas e advogados</div>
+  <div class="lead" id="P_lead" style="margin-top:38px">Como protocolar <b>corretamente</b> um processo no PJe, passo a passo.</div>
+ </div>
+ <div class="win" id="P_win" style="left:1000px;top:165px;width:800px;height:660px">
+  <div class="wbar"><i style="background:#ff6058"></i><i style="background:#ffbd2e"></i><i style="background:#29c940"></i><span>PJe · novo processo</span></div>
+  <div id="P_steps" class="abs" style="left:50px;right:50px;top:92px;height:110px">
+   <div class="abs" style="left:70px;right:70px;top:32px;height:4px;background:#e6eef3;border-radius:2px"></div>
+   <div class="abs" id="P_prog" style="left:70px;top:32px;height:4px;width:0;background:var(--blue);border-radius:2px"></div>
+  </div>
+  <div id="P_panels" class="abs" style="left:60px;right:60px;top:230px;height:380px"></div>
+  <div id="P_stamp" class="abs" style="left:50%;top:330px;margin-left:-250px;width:500px;height:150px;border:6px solid var(--green);border-radius:22px;color:#4f8f22;background:rgba(255,255,255,.94);display:flex;align-items:center;justify-content:center;gap:22px;font-family:var(--mono);font-size:44px;font-weight:500;letter-spacing:6px">
+   <svg width="64" height="64" viewBox="0 0 26 26"><circle cx="13" cy="13" r="12" fill="#7AB648"/><path d="M7 13.5l4 4 8-9" stroke="#fff" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>PROTOCOLADO</div>
+ </div>
+</div>
+
+<!-- L: LGPD -->
+<div class="scene" id="L">
+ <div class="abs" id="L_vis" style="left:80px;top:130px;width:900px;height:760px">
+  <svg class="abs" id="L_lines" width="900" height="760" style="left:0;top:0"></svg>
+  <svg class="abs" width="900" height="760" style="left:0;top:0">
+   <defs><linearGradient id="shg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#eef7e6"/><stop offset="1" stop-color="#d8edc6"/></linearGradient></defs>
+   <path id="L_shf" d="M450 170 L600 225 Q600 420 450 520 Q300 420 300 225 Z" fill="url(#shg)" opacity="0"/>
+   <path id="L_sh" d="M450 170 L600 225 Q600 420 450 520 Q300 420 300 225 Z" fill="none" stroke="#7AB648" stroke-width="8" stroke-linejoin="round"/>
+   <g id="L_lock" opacity="0"><rect x="405" y="320" width="90" height="74" rx="14" fill="#7AB648"/><path d="M420 322 v-22 a30 30 0 0 1 60 0 v22" fill="none" stroke="#7AB648" stroke-width="12"/><circle cx="450" cy="350" r="9" fill="#fff"/><rect x="446" y="352" width="8" height="22" rx="4" fill="#fff"/></g>
+  </svg>
+  <div class="ocard" id="L_o0" style="left:0;top:40px"><div class="oi" style="background:#eef7e6"><svg width="32" height="32" viewBox="0 0 32 32"><circle cx="12" cy="11" r="6" fill="#7AB648"/><path d="M2 28c0-6 4-10 10-10s10 4 10 10z" fill="#7AB648"/><path d="M22 6h8v10h-4l-3 3v-3h-1z" fill="#a9d483"/></svg></div><b>Consultoria especializada</b></div>
+  <div class="ocard" id="L_o1" style="left:570px;top:40px"><div class="oi" style="background:#e8f5fc"><svg width="32" height="32" viewBox="0 0 32 32"><rect x="6" y="3" width="20" height="26" rx="3" fill="#00A0E3"/><rect x="10" y="9" width="12" height="2.5" rx="1" fill="#fff"/><rect x="10" y="15" width="12" height="2.5" rx="1" fill="#fff"/><rect x="10" y="21" width="8" height="2.5" rx="1" fill="#fff"/></svg></div><b>Soluções e instrumentos</b></div>
+  <div class="ocard" id="L_o2" style="left:0;top:560px"><div class="oi" style="background:#fdf0e1"><svg width="32" height="32" viewBox="0 0 32 32"><rect x="4" y="18" width="6" height="10" rx="1.5" fill="#F7941D"/><rect x="13" y="12" width="6" height="16" rx="1.5" fill="#F7941D"/><rect x="22" y="5" width="6" height="23" rx="1.5" fill="#F7941D"/></svg></div><b>Governança de dados pessoais</b></div>
+  <div class="ocard" id="L_o3" style="left:570px;top:560px"><div class="oi" style="background:#fbe5ef"><svg width="32" height="32" viewBox="0 0 32 32"><circle cx="16" cy="16" r="13" fill="none" stroke="#D41876" stroke-width="3"/><circle cx="16" cy="16" r="5" fill="#D41876"/></svg></div><b>Cultura de conscientização</b></div>
+ </div>
+ <div class="abs" id="L_text" style="left:1060px;top:200px;width:760px">
+  <div class="tag" style="color:var(--green)">Destaque · Eixo II</div>
+  <div class="title" style="font-size:112px;margin-top:26px">Proteção de<br><em style="color:var(--green)">dados pessoais</em></div>
+  <div class="lead" id="L_lead" style="margin-top:40px">Consultoria especializada para fortalecer a <b>governança</b> de proteção de dados da JFCE.</div>
+  <div id="L_law" style="margin-top:34px;font-family:var(--mono);font-size:19px;letter-spacing:3px;color:var(--muted)">LGPD · LEI Nº 13.709/2018</div>
+ </div>
+</div>
+
+<!-- S: Servidor + IA (dark) -->
+<div class="scene" id="S">
+ <div id="S_parts"></div>
+ <div class="abs" id="S_glow" style="left:-200px;top:-300px;width:1400px;height:1100px;background:radial-gradient(circle,rgba(255,138,61,.16),rgba(255,138,61,0) 60%)"></div>
+ <div class="abs" id="S_head" style="left:130px;top:130px">
+  <div class="tag">Destaque · Eixo III</div>
+  <div style="font-family:var(--sans);font-weight:800;font-size:148px;letter-spacing:-4px;color:#fff;margin-top:20px;line-height:1">Servidor <span style="color:var(--ia)">+ IA</span></div>
+  <div style="font-size:36px;color:#cfcfcf;margin-top:22px">Curso e formação de multiplicadores</div>
+ </div>
+ <div class="abs" id="S_count" style="right:130px;top:140px;text-align:right">
+  <div style="font-family:var(--sans);font-weight:800;font-size:190px;line-height:1;letter-spacing:-6px;color:var(--ia)"><span id="S_v">0</span>+</div>
+  <div style="font-size:32px;color:#e6e6e6;margin-top:6px;font-weight:500">servidores multiplicadores<br>formados</div>
+ </div>
+ <div class="abs" id="S_chips" style="left:130px;top:440px"><span class="ichip" id="S_c0"><i></i>Foco na área-fim</span><span class="ichip" id="S_c1"><i></i>Estratégias institucionais e validadas</span></div>
+ <svg class="abs" id="S_trail" width="1920" height="1080" style="left:0;top:0"><path id="S_tp" d="M330 790 L1590 600" stroke="rgba(255,138,61,.55)" stroke-width="3" stroke-dasharray="10 12" fill="none"/></svg>
+ <div id="S_mods"></div>
+</div>
+
+<!-- E: Lab Low Code -->
+<div class="scene" id="E">
+ <div class="win" id="E_win" style="left:120px;top:170px;width:860px;height:680px">
+  <div class="wbar"><i style="background:#ff6058"></i><i style="background:#ffbd2e"></i><i style="background:#29c940"></i><span>lab-low-code · nova aplicação</span></div>
+  <div class="abs" style="left:0;top:52px;width:200px;bottom:0;background:#FAFAF8;border-right:1.5px solid var(--border)">
+   <div style="font-family:var(--mono);font-size:14px;letter-spacing:2px;color:#aaa;margin:26px 0 0 26px">COMPONENTES</div>
+   <div class="blk" style="left:26px;top:66px;width:148px;height:44px;background:#e8f5fc"></div><div class="blk" style="left:26px;top:124px;width:148px;height:44px;background:#eef6e6"></div>
+   <div class="blk" style="left:26px;top:182px;width:148px;height:44px;background:#fdf0e1"></div><div class="blk" style="left:26px;top:240px;width:148px;height:44px;background:#fbe5ef"></div>
+   <div class="blk" style="left:26px;top:298px;width:148px;height:44px;background:#f1e6f0"></div>
+  </div>
+  <div class="abs" style="left:200px;top:52px;right:0;bottom:0;background-image:radial-gradient(#e4e4df 1.4px,transparent 1.4px);background-size:26px 26px"></div>
+  <div class="blk" id="E_b0" style="left:250px;top:100px;width:560px;height:70px;background:var(--green);display:flex;align-items:center;padding-left:26px;color:#fff;font-size:26px;font-weight:700">Solicitação de Serviço</div>
+  <div class="blk" id="E_b1" style="left:250px;top:196px;width:560px;height:66px;border:2px solid #d9d9d4;background:#fff;display:flex;align-items:center;padding-left:22px;color:#999;font-size:22px">Nome do solicitante</div>
+  <div class="blk" id="E_b2" style="left:250px;top:280px;width:560px;height:66px;border:2px solid #d9d9d4;background:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 22px;color:#999;font-size:22px">Unidade <span style="color:#bbb">▾</span></div>
+  <div class="blk" id="E_b3" style="left:250px;top:364px;width:560px;height:66px;display:flex;align-items:center;gap:18px;font-size:22px;color:var(--sub)"><span style="width:66px;height:36px;border-radius:18px;background:var(--green);position:relative;display:block"><span style="position:absolute;right:4px;top:4px;width:28px;height:28px;border-radius:50%;background:#fff"></span></span>Notificar por e-mail</div>
+  <div class="blk" id="E_b4" style="left:250px;top:450px;width:560px;height:112px;border:2px dashed var(--purple);background:#faf4f9;padding:16px 20px;font-size:21px"><div style="font-family:var(--mono);font-size:14px;letter-spacing:2px;color:var(--purple);margin-bottom:8px">✦ IA GENERATIVA</div><span id="E_type"></span><span id="E_caret" style="display:inline-block;width:2px;height:24px;background:var(--purple);vertical-align:middle;margin-left:2px"></span></div>
+  <div class="blk" id="E_b5" style="left:590px;top:586px;width:220px;height:62px;background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:center;font-size:23px;font-weight:600">Publicar</div>
+  <svg id="E_cursor" class="abs" width="44" height="44" viewBox="0 0 24 24" style="left:0;top:0"><path d="M4 2l15 9-6.5 1.6L16 20l-3 1.4-3.6-7.3L4 18z" fill="#121212" stroke="#fff" stroke-width="1.3"/></svg>
+ </div>
+ <div class="abs" id="E_text" style="left:1060px;top:190px;width:760px">
+  <div class="tag" style="color:var(--green)">Destaque · Eixo III</div>
+  <div class="title" style="font-size:122px;margin-top:24px">Lab <em style="color:var(--green)">Low Code</em></div>
+  <div id="E_status" style="margin-top:24px;display:inline-flex;align-items:center;gap:12px;font-family:var(--mono);font-size:18px;letter-spacing:3px;color:var(--orange);border:2px solid var(--orange);border-radius:999px;padding:9px 18px"><span style="width:10px;height:10px;border-radius:50%;background:var(--orange)"></span>EM IMPLANTAÇÃO · 2026</div>
+  <div class="lead" id="E_lead" style="margin-top:40px">Soluções digitais criadas <b>pelos próprios servidores</b>.</div>
+  <div style="margin-top:38px"><span class="chip" id="E_c0" style="color:var(--blue)"><i></i>Automações</span><span class="chip" id="E_c1" style="color:var(--green)"><i></i>Formulários</span><span class="chip" id="E_c2" style="color:var(--orange)"><i></i>Aplicações</span><span class="chip" id="E_c3" style="color:var(--magenta)"><i></i>Baixo código</span><span class="chip" id="E_c4" style="color:var(--purple)"><i></i>IA generativa</span></div>
+ </div>
+</div>
+
+<!-- J: Jornada do segurado -->
+<div class="scene" id="J">
+ <div class="abs" id="J_text" style="left:130px;top:170px;width:760px">
+  <div class="tag" style="color:var(--magenta)">Destaque · Eixo IV</div>
+  <div class="title" style="font-size:112px;margin-top:26px">A jornada<br>do <em>segurado</em></div>
+  <div class="lead" id="J_lead" style="margin-top:40px">Etapas e atos das <b>ações previdenciárias</b> explicados de forma compreensível.</div>
+  <div id="J_tags" style="margin-top:34px"><span class="chip" style="color:var(--magenta)"><i></i>Linguagem simples</span><span class="chip" style="color:var(--blue)"><i></i>Menos barreiras</span></div>
+ </div>
+ <div class="abs" id="J_vis" style="left:900px;top:130px;width:940px;height:760px">
+  <svg class="abs" width="940" height="760" style="left:0;top:0">
+   <path id="J_p0" d="M60 680 C 280 680 250 470 470 470 C 690 470 650 260 860 250" fill="none" stroke="#f2d6e4" stroke-width="16" stroke-linecap="round"/>
+   <path id="J_p" d="M60 680 C 280 680 250 470 470 470 C 690 470 650 260 860 250" fill="none" stroke="#D41876" stroke-width="16" stroke-linecap="round"/>
+  </svg>
+  <div id="J_sts"></div>
+  <div class="abs" id="J_av" style="width:64px;height:64px;margin:-32px 0 0 -32px;border-radius:50%;background:#D41876;box-shadow:0 0 0 10px rgba(212,24,118,.15);display:flex;align-items:center;justify-content:center">
+   <svg width="34" height="34" viewBox="0 0 34 34"><circle cx="17" cy="11" r="6" fill="#fff"/><path d="M6 30c0-7 5-11 11-11s11 4 11 11z" fill="#fff"/></svg></div>
+  <div class="fb" id="J_f0" style="left:30px;top:20px"><div class="fi" style="background:#fbe5ef"><svg width="28" height="28" viewBox="0 0 28 28"><path d="M14 2l3.5 7.5L26 11l-6 5.8 1.5 8.2L14 21l-7.5 4 1.5-8.2L2 11l8.5-1.5z" fill="#D41876"/></svg></div>Simulação imersiva</div>
+  <div class="fb" id="J_f1" style="left:30px;top:110px"><div class="fi" style="background:#e8f5fc"><svg width="30" height="30" viewBox="0 0 30 30"><circle cx="9" cy="8" r="4" fill="#00A0E3"/><circle cx="21" cy="8" r="4" fill="#7cc8ee"/><path d="M2 22c0-4 3-7 7-7s7 3 7 7z" fill="#00A0E3"/><path d="M14 22c0-4 3-7 7-7s7 3 7 7z" fill="#7cc8ee"/><path d="M8 26h14m-3-3 3 3-3 3" stroke="#00A0E3" stroke-width="2" fill="none"/></svg></div>Alternância de papéis</div>
+  <div class="fb" id="J_f2" style="left:30px;top:200px"><div class="fi" style="background:#fdf0e1"><svg width="28" height="28" viewBox="0 0 28 28"><path d="M4 4h20a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H12l-6 5v-5H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z" fill="#F7941D"/><rect x="7" y="9" width="14" height="2.4" rx="1" fill="#fff"/><rect x="7" y="13.5" width="9" height="2.4" rx="1" fill="#fff"/></svg></div>Relatos reais anonimizados</div>
+  <div class="abs" id="J_guide" style="left:590px;top:548px;width:350px;height:200px;background:#fff;border:1.5px solid var(--border);border-radius:20px;box-shadow:0 22px 60px rgba(212,24,118,.14);padding:26px 28px;overflow:hidden">
+   <div class="abs" style="left:0;top:0;width:100%;height:8px;background:var(--magenta)"></div>
+   <div style="font-family:var(--mono);font-size:14px;letter-spacing:3px;color:var(--magenta)">GUIA DE RESPOSTAS</div>
+   <div style="font-family:var(--serif);font-size:27px;font-weight:600;margin:6px 0 14px;white-space:nowrap">Dúvidas mais frequentes</div>
+   <div class="jq" style="display:flex;align-items:center;gap:12px;margin-bottom:10px"><b style="width:28px;height:28px;border-radius:50%;background:#fbe5ef;color:var(--magenta);display:flex;align-items:center;justify-content:center;font-size:18px">?</b><span class="sk" style="width:230px;margin:0"></span></div>
+   <div class="jq" style="display:flex;align-items:center;gap:12px;margin-bottom:10px"><b style="width:28px;height:28px;border-radius:50%;background:#fbe5ef;color:var(--magenta);display:flex;align-items:center;justify-content:center;font-size:18px">?</b><span class="sk" style="width:190px;margin:0"></span></div>
+   <div class="jq" style="display:flex;align-items:center;gap:12px"><b style="width:28px;height:28px;border-radius:50%;background:#fbe5ef;color:var(--magenta);display:flex;align-items:center;justify-content:center;font-size:18px">?</b><span class="sk" style="width:210px;margin:0"></span></div>
+  </div>
+ </div>
+</div>
+
+<!-- F -->
+<div class="scene" id="F">
+ <div class="abs" id="F_head" style="left:0;right:0;top:170px;text-align:center"><div class="tag" style="justify-content:center">Projetos</div><div class="title" style="font-size:96px;margin-top:22px">Inovação que chega<br>a <em>quem mais precisa</em></div></div>
+ <div class="abs" id="F_row" style="left:0;top:600px;height:240px;width:4000px"></div>
+</div>
+
+<!-- G -->
+<div class="scene" id="G">
+ <img id="G_logo" src="assets/logo-inovajus.png" class="abs" style="left:50%;top:120px;width:740px;margin-left:-370px">
+ <div class="title abs" id="G_t" style="left:0;right:0;top:560px;text-align:center;font-size:100px;line-height:1.08"><div id="G_l1"></div><div id="G_l2"></div></div>
+ <div class="abs" id="G_bar" style="left:50%;top:840px;width:520px;margin-left:-260px;height:8px;display:flex;border-radius:4px;overflow:hidden"><span style="flex:1;background:var(--magenta)"></span><span style="flex:1;background:var(--orange)"></span><span style="flex:1;background:var(--green)"></span><span style="flex:1;background:var(--blue)"></span><span style="flex:1;background:var(--purple)"></span></div>
+</div>
+
+<div id="topbar"><span style="background:var(--magenta)"></span><span style="background:var(--orange)"></span><span style="background:var(--green)"></span><span style="background:var(--blue)"></span><span style="background:var(--purple)"></span></div>
+<div id="brand"><b>Inovajus</b> · Laboratório de Inovação da JFCE</div>
+<div id="sub"></div>
+
+<!-- H -->
+<div class="scene" id="H">
+ <div class="abs" id="H_wrap" style="left:0;top:0;width:1920px;height:1080px;transform-origin:960px 540px">
+  <svg class="abs" width="1920" height="1080" style="left:0;top:0"><circle id="H_c1" r="10" fill="none" stroke="#3f5aa8" stroke-width="3"/><circle id="H_c2" r="10" fill="none" stroke="#3c9a68" stroke-width="2"/></svg>
+  <img class="lp" id="H_tl" src="assets/p_tl.png"><img class="lp" id="H_tr" src="assets/p_tr.png"><img class="lp" id="H_bl" src="assets/p_bl.png"><img class="lp" id="H_br" src="assets/p_br.png">
+  <div class="abs" id="H_t1c" style="overflow:hidden"><img class="lp" id="H_t1" src="assets/t1.png" style="left:0;top:0"></div>
+  <img class="lp" id="H_t2" src="assets/t2.png">
+ </div>
+</div>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+const clamp=(x,a=0,b=1)=>Math.min(b,Math.max(a,x));
+const P=(t,a,b)=>clamp((t-a)/(b-a));
+const eo=x=>1-Math.pow(1-x,3), eo5=x=>1-Math.pow(1-x,5), eio=x=>x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2;
+const ex=x=>x>=1?1:1-Math.pow(2,-10*x);
+const back=x=>{const c1=1.4,c3=c1+1;return 1+c3*Math.pow(x-1,3)+c1*Math.pow(x-1,2)};
+const lerp=(a,b,x)=>a+(b-a)*x;
+function rise(el,t,a,d=0.8,dist=40){const p=eo5(P(t,a,a+d));el.style.opacity=p;el.style.transform=`translateY(${(1-p)*dist}px)`;return p}
+function pop(el,t,a,d=0.55){const p=P(t,a,a+d);el.style.opacity=clamp(p*2.5);el.style.transform=`scale(${lerp(.6,1,back(p))})`;return p}
+function slide(el,t,a,d=0.7,dx=-40){const p=eo5(P(t,a,a+d));el.style.opacity=p;el.style.transform=`translateX(${(1-p)*dx}px)`;return p}
+
+/* ---- timing helpers (all derived from narration audio) ---- */
+const TM=window.TIMING, SC=TM.scenes, LN=TM.lines;
+const S0=id=>LN[id].s0, S1=id=>LN[id].s1, sc=k=>SC[k][0], se=k=>SC[k][1];
+function W(id,word){const l=LN[id];const i=l.tts.toLowerCase().indexOf(word.toLowerCase());
+ if(i<0){console.log('MISSING WORD',id,word);return l.s0}
+ return l.s0+(l.s1-l.s0)*(i/l.tts.length)}
+
+function words(el,arr){el.innerHTML=arr.map(w=>`<span class="mask"><span class="word">${w}</span></span>`).join(' ');return [...el.querySelectorAll('.word')]}
+const A_w=words($('A_title'),['Inovação','com','<em>propósito</em>']);
+const G_w=[...words($('G_l1'),['Uma','Justiça','mais','<em class="g1">eficiente,</em>','<em class="g2">acessível</em>']),...words($('G_l2'),['e','centrada','nas','<em class="g3">pessoas.</em>'])];
+
+/* bubbles */
+const BC=['#D41876','#7AB648','#00A0E3','#F7941D','#9B3A8E'];
+let seed=7;const rnd=()=>{seed=(seed*16807)%2147483647;return seed/2147483647};
+const bubbles=[];
+for(let i=0;i<16;i++){const s=40+rnd()*110,c=BC[i%5],round=rnd()>.5;
+ const svg=round?`<svg width="${s}" height="${s}" viewBox="0 0 100 100"><path d="M50 8a40 38 0 1 1-22 70L12 90l6-20A40 38 0 0 1 50 8z" fill="${c}"/></svg>`:`<svg width="${s}" height="${s}" viewBox="0 0 100 100"><path d="M14 14h72a8 8 0 0 1 8 8v44a8 8 0 0 1-8 8H44L26 90V74H14a8 8 0 0 1-8-8V22a8 8 0 0 1 8-8z" fill="${c}"/></svg>`;
+ const d=document.createElement('div');d.className='bub';d.innerHTML=svg;$('bubbles').appendChild(d);
+ bubbles.push({d,x:rnd()*1920,y:rnd()*1080,vx:(rnd()-.5)*14,vy:-6-rnd()*12,ph:rnd()*6.28,r:(rnd()-.5)*30,o:.05+rnd()*.05});}
+
+/* IA particles */
+const sparts=[];for(let i=0;i<46;i++){const d=document.createElement('div');const s=3+rnd()*9;
+ d.style.cssText=`position:absolute;width:${s}px;height:${s}px;border-radius:50%;background:#FF8A3D`;$('S_parts').appendChild(d);
+ sparts.push({d,x:rnd()*1920,y:rnd()*1080,vx:(rnd()-.5)*10,vy:-4-rnd()*10,o:.25+rnd()*.45,ph:rnd()*6.28});}
+const MODS=[['1','Fundamentos','6h · prompt'],['2','Pensamento causal','6h · crítica'],['3','Prática forense','9h · forense'],['4','Ética e governança','3h · LGPD'],['★','Horizonte','sistemas agênticos']];
+const modEls=MODS.map((m,i)=>{const d=document.createElement('div');d.className='mod';const x=330+i*315,y=790-i*47.5;
+ d.style.left=x+'px';d.style.top=(y-100)+'px';d.innerHTML=`<div class="mt">${m[1]}</div><div class="mc">${m[0]}</div><div class="mh">${m[2]}</div>`;$('S_mods').appendChild(d);return d});
+
+/* Protocolo Certo steps */
+const PST=['Dados iniciais','Partes','Documentos','Assinar e protocolar'];
+const pstEls=PST.map((s,i)=>{const d=document.createElement('div');d.className='abs';d.style.cssText=`left:${70+i*(560/3)-60}px;top:0;width:120px;text-align:center`;
+ d.innerHTML=`<div class="pc" style="width:68px;height:68px;margin:0 auto;border-radius:50%;background:#fff;border:3px solid #dbe5eb;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:700;color:#b5c3cc">${i+1}</div><div style="margin-top:12px;font-size:19px;font-weight:600;color:#7b8a93;white-space:nowrap;margin-left:-40px;margin-right:-40px">${s}</div>`;
+ $('P_steps').appendChild(d);return d});
+const PAN=[
+ `<div class="fld">Classe judicial</div><div class="fld">Assunto</div><div class="fld">Órgão julgador</div>`,
+ `<div class="fld">Polo ativo · Autor</div><div class="fld">Polo passivo · Réu</div><div class="fld">Advogado(a) · OAB</div>`,
+ `<div style="display:flex;gap:18px;margin-bottom:18px"><div style="flex:1;height:120px;border:2px dashed #a9d6ee;border-radius:14px;display:flex;align-items:center;justify-content:center;color:#0b6f9e;font-size:21px;font-weight:600;background:#f4fafd">⬆ Anexar PDF</div></div><div class="fld" style="color:var(--ink)">📄 peticao_inicial.pdf <span style="margin-left:auto;color:#4f8f22;font-weight:700">✓</span></div><div class="fld" style="color:var(--ink)">📄 documentos_pessoais.pdf <span style="margin-left:auto;color:#4f8f22;font-weight:700">✓</span></div>`,
+ `<div class="sk" style="width:80%"></div><div class="sk" style="width:65%"></div><div class="sk" style="width:72%;margin-bottom:40px"></div><div style="height:74px;border-radius:14px;background:var(--blue);color:#fff;font-size:26px;font-weight:700;display:flex;align-items:center;justify-content:center">Assinar e protocolar</div>`];
+const panEls=PAN.map(h=>{const d=document.createElement('div');d.className='abs';d.style.cssText='left:0;right:0;top:0';d.innerHTML=h;$('P_panels').appendChild(d);return d});
+
+/* journey stations */
+const jp=$('J_p'),JL=jp.getTotalLength();const JF=[.06,.36,.66,.97];
+const jst=JF.map((f,i)=>{const p=jp.getPointAtLength(JL*f);const d=document.createElement('div');d.className='st';d.style.left=p.x+'px';d.style.top=p.y+'px';
+ d.innerHTML=`${i+1}<span>ESTAÇÃO ${i+1}</span>`;$('J_sts').appendChild(d);return d});
+
+/* projects */
+const PR=[['Mandado Cidadão','Legal Design','#D41876'],['Teatro PopRua','Arte e cidadania','#F7941D'],['Linguagem Simples','Formação e oficinas','#7AB648'],['PID — Jornada do Usuário','Design de serviço','#00A0E3'],['HubJus Maracanaú','Design de espaços','#9B3A8E'],['Bolsa Débora Aguiar','Bolsas de estudo','#D41876'],['Banco de Talentos','Metodologia ágil','#7AB648'],['Você Gestor','Design Thinking','#F7941D']];
+const pcards=PR.map((p,i)=>{const d=document.createElement('div');d.className='pcard';d.style.left=(i*370)+'px';d.innerHTML=`<div class="pb" style="background:${p[2]}"></div><span>${p[1]}</span><h4>${p[0]}</h4>`;$('F_row').appendChild(d);return d});
+
+/* closing logo */
+const LM={"br":[886,662,387,370],"tl":[482,401,387,370],"bl":[484,785,387,367],"tr":[885,279,385,369],"t1":[100,1195,1580,200],"t2":[100,1395,1580,135]};
+const LS=0.5,LOX=960-(141+740)*LS,LOY=530-(279+619)*LS;
+function place(el,k){const m=LM[k];el.style.left=(LOX+m[0]*LS)+'px';el.style.top=(LOY+m[1]*LS)+'px';el.style.width=(m[2]*LS)+'px';el.style.height=(m[3]*LS)+'px'}
+['tl','tr','bl','br','t2'].forEach(k=>place($('H_'+k),k));place($('H_t1c'),'t1');$('H_t1').style.width=(1580*LS)+'px';$('H_t1').style.height=(200*LS)+'px';
+const SCX=LOX+875*LS,SCY=LOY+720*LS;
+
+const CW=387,CH=400,CT=400,CL=140,CG=30;const FOCUS=[300,215,1320,600];
+
+function sceneVis(id,t){const [s,e]=SC[id];const el=$(id);
+ const fi=id==='A'?1:eio(P(t,s-.35,s+.35)),fo=id==='H'?1:1-eio(P(t,e-.35,e+.35));
+ const o=Math.min(fi,fo);el.style.opacity=o;el.style.visibility=o<=0.001?'hidden':'visible';
+ el.style.transform=`translateY(${(1-fi)*24-(1-fo)*24}px)`;return o>0.001}
+
+window.render=function(t){
+ const HS=sc('H');
+ const dark=Math.min(eio(P(t,sc('S')-.35,sc('S')+.35)),1-eio(P(t,se('S')-.35,se('S')+.35)));
+ for(const b of bubbles){const x=((b.x+b.vx*t)%2100+2100)%2100-90,y=((b.y+b.vy*t)%1260+1260)%1260-90;
+  b.d.style.transform=`translate(${x+Math.sin(t*.4+b.ph)*18}px,${y}px) rotate(${b.r+Math.sin(t*.3+b.ph)*6}deg)`;b.d.style.opacity=b.o*(1-P(t,HS-.4,HS+.2))*P(t,7.2,8.6)}
+ [...$('topbar').children].forEach((s,i)=>{s.style.transform=`scaleX(${eo5(P(t,7.6+i*.08,8.6+i*.08))})`});
+ const chromeOut=1-P(t,HS-.4,HS+.1);$('topbar').style.opacity=chromeOut;
+ const br=eo(P(t,8.2,9.0));$('brand').style.opacity=br*chromeOut;$('brand').style.transform=`translateX(${(1-br)*-20}px)`;
+ $('brand').style.color=dark>.5?'#777':'#9a9a9a';$('brand').querySelector('b').style.color=dark>.5?'#eee':'#121212';
+ const sub=$('sub');let cue=null;for(const c of TM.cues){if(t>=c[0]-0.12&&t<c[1]+0.12){cue=c;break}}
+ if(cue){if(sub.dataset.k!==cue[2]){sub.textContent=cue[2];sub.dataset.k=cue[2]}sub.style.opacity=Math.min(P(t,cue[0]-0.12,cue[0]+0.08),1-P(t,cue[1]-0.08,cue[1]+0.12))}else sub.style.opacity=0;
+
+ if(sceneVis('A',t)){const a=sc('A')+0.8;
+  rise($('A_tag'),t,a,.8,20);
+  A_w.forEach((w,i)=>{const p=eo5(P(t,a+.25+i*.16,a+1.25+i*.16));w.style.transform=`translateY(${(1-p)*110}%)`;w.style.opacity=p});
+  rise($('A_subt'),t,a+1.3,.9,26);
+  const s=eo5(P(t,S0('a2'),S0('a2')+1));$('A_since').style.opacity=s;$('A_l1').style.transform=`scaleX(${s})`;$('A_l2').style.transform=`scaleX(${s})`;
+  pop($('A_p1'),t,W('a2','método')-.1);pop($('A_p2'),t,W('a2','ciência')-.1);pop($('A_p3'),t,W('a2','humanização')-.1);
+  $('A_box').style.transform=`translateY(${-eio(P(t,se('A')-.5,se('A')+.3))*40}px)`;}
+
+ if(sceneVis('B',t)){rise($('B_tag'),t,sc('B')+.1,.7,16);
+  [[1,W('b1','duzentos'),200],[2,W('b1','onze'),11],[3,W('b1','quatro'),4]].forEach(([i,a,v])=>{const c=$('B_c'+i);rise(c,t,a-.35,.8,50);
+   c.querySelector('.bar').style.width=(eo5(P(t,a-.1,a+.9))*120)+'px';c.querySelector('.v').textContent=Math.round(v*eo(P(t,a,a+1.3)))});}
+
+ if(sceneVis('C',t)){rise($('C_head'),t,sc('C')+.1,.8,24);
+  const st=['c1','c2','c3','c4'].map(S0);const fA=S0('c4')+2.0;const f=eio(P(t,fA,fA+1.2));
+  for(let i=0;i<4;i++){const el=$('C_'+(i+1));const p=eo5(P(t,st[i],st[i]+.85));let x=CL+i*(CW+CG),y=CT,w=CW,h=CH;
+   if(i<3){Object.assign(el.style,{left:x+'px',top:y+'px',width:w+'px',height:h+'px',opacity:p*(1-f),transform:`translateY(${(1-p)*70+f*30}px) scale(${1-f*.06})`});
+    el.querySelector('.cbar').style.width=(t>=st[i]&&t<st[i+1]?14:9)+'px';}
+   else{x=lerp(x,FOCUS[0],f);y=lerp(y,FOCUS[1],f);w=lerp(w,FOCUS[2],f);h=lerp(h,FOCUS[3],f);
+    Object.assign(el.style,{left:x+'px',top:y+'px',width:w+'px',height:h+'px',opacity:p,transform:`translateY(${(1-p)*70}px)`,padding:`${lerp(40,56,f)}px ${lerp(36,56,f)}px`,boxShadow:`0 ${18+f*20}px ${50+f*40}px rgba(212,24,118,${.06+f*.08})`});
+    el.querySelector('.cbar').style.width=lerp(9,14,f)+'px';
+    $('C_4h').style.fontSize=lerp(44,78,f)+'px';$('C_4p').style.fontSize=lerp(21,30,f)+'px';$('C_4x').style.opacity=eo(P(t,fA+.9,fA+1.7));
+    [...$('C_chips').children].forEach((c,k)=>pop(c,t,fA+1.3+k*.18,.5));pop($('C_new'),t,st[3]+.6,.5);}}
+  $('C_head').style.opacity=Math.min(eo5(P(t,sc('C')+.1,sc('C')+.9)),1-f);}
+
+ if(sceneVis('D',t)){rise($('D_text'),t,sc('D')+.1,.9,30);rise($('D_flow'),t,sc('D')+.4,.9,30);
+  [[1,W('d1','automatiza')],[2,W('d1','redesenha')],[3,W('d1','alcance')]].forEach(([i,a])=>{const el=$('D_k'+i);slide(el,t,a-.15,.7);el.querySelector('.ck').style.transform=`scale(${back(P(t,a,a+.5))})`});
+  const path=$('D_path2'),L=path.getTotalLength();const d0=sc('D')+1.4,d1=S1('d1')-.6;
+  const nodesAt=[0,530,810,1340,1620,2150].map(v=>v/2150);const draw=eio(P(t,d0,d1));
+  path.style.strokeDasharray=L;path.style.strokeDashoffset=L*(1-draw);const pt=path.getPointAtLength(L*draw);
+  for(const id of ['D_dot','D_dotg']){$(id).setAttribute('cx',pt.x);$(id).setAttribute('cy',pt.y)}
+  const dv=P(t,d0-.2,d0+.2)*(1-P(t,d1,d1+.5));$('D_dot').style.opacity=dv;$('D_dotg').style.opacity=.18*dv;
+  for(let k=0;k<6;k++){const n=$('D_n'+k);const on=P(draw,nodesAt[k]-.001,nodesAt[k]+.04);
+   n.style.borderColor=on>0?`rgba(0,160,227,${.3+.7*on})`:'#d6dde3';n.style.color=on>.5?'#0b6f9e':'';n.style.background=`rgb(${lerp(255,232,on)},${lerp(255,245,on)},${lerp(255,252,on)})`;
+   const a=n.querySelector('.auto');const ap=on>=1?P(t,d0+k*.25+.6,d0+k*.25+1.1):0;a.style.opacity=ap;a.style.transform=`scale(${back(ap)})`;
+   n.style.transform=`scale(${1+.06*Math.sin(Math.PI*clamp((draw-nodesAt[k])/.05))})`;}}
+
+ if(sceneVis('P',t)){rise($('P_text'),t,sc('P')+.1,.9,30);rise($('P_win'),t,sc('P')+.35,.9,40);
+  pop($('P_aud'),t,W('p1','advogadas')-.2,.6);rise($('P_lead'),t,W('p1','protocolar')-.2,.8,20);
+  const T4=[sc('P')+1.0,W('p1','ensina'),W('p1','protocolar'),W('p1','corretamente')];const stamp=W('p1','processo')+.2;
+  let act=0;for(let i=0;i<4;i++)if(t>=T4[i])act=i;
+  pstEls.forEach((e,i)=>{const c=e.querySelector('.pc');const done=t>=(T4[i+1]||stamp),cur=i===act&&!done;
+   c.style.background=done?'#00A0E3':'#fff';c.style.borderColor=done||cur?'#00A0E3':'#dbe5eb';c.style.color=done?'#fff':cur?'#00A0E3':'#b5c3cc';
+   c.style.transform=`scale(${1+.12*Math.sin(Math.PI*P(t,T4[i],T4[i]+.4))})`;c.textContent=done?'✓':String(i+1);
+   e.lastChild.style.color=done||cur?'#0b6f9e':'#7b8a93'});
+  let prog=0;for(let i=1;i<4;i++)prog+=eio(P(t,T4[i]-.3,T4[i]));$('P_prog').style.width=(prog/3*560)+'px';
+  panEls.forEach((p,i)=>{const o=Math.min(P(t,T4[i],T4[i]+.35),1-P(t,(T4[i+1]||99)-.1,(T4[i+1]||99)+.25));p.style.opacity=o;p.style.transform=`translateX(${(1-P(t,T4[i],T4[i]+.45))*40}px)`});
+  const sp=P(t,stamp,stamp+.5);$('P_stamp').style.opacity=clamp(sp*3);$('P_stamp').style.transform=`rotate(-7deg) scale(${lerp(1.6,1,eo5(sp))})`;}
+
+ if(sceneVis('L',t)){rise($('L_text'),t,sc('L')+.25,.9,30);
+  const sh=$('L_sh'),SL=sh.getTotalLength();const dp=eio(P(t,sc('L')+.2,sc('L')+1.6));sh.style.strokeDasharray=SL;sh.style.strokeDashoffset=SL*(1-dp);
+  $('L_shf').style.opacity=P(t,sc('L')+1.2,sc('L')+1.9);const lk=P(t,sc('L')+1.5,sc('L')+2.1);$('L_lock').style.opacity=lk;$('L_lock').style.transform=`translateY(${(1-eo5(lk))*20}px)`;
+  const OT=[W('l1','consultoria'),W('l1','soluções'),W('l2','governança'),W('l2','cultura')];
+  const OC=[[165,110],[735,110],[165,630],[735,630]];let lines='';
+  OT.forEach((a,i)=>{const p=pop($('L_o'+i),t,a-.1,.6);const q=eo5(P(t,a-.1,a+.6));const [x,y]=OC[i];const ex2=lerp(450,x,q),ey=lerp(345,y,q);
+   lines+=`<line x1="450" y1="345" x2="${ex2}" y2="${ey}" stroke="#cfd8c4" stroke-width="2.5" stroke-dasharray="6 8" opacity="${q}"/>`});
+  $('L_lines').innerHTML=lines;rise($('L_lead'),t,S0('l1')+.4,.8,20);rise($('L_law'),t,S0('l2'),.8,14);
+  $('L_vis').style.transform=`scale(${1+.02*Math.sin(t*.8)})`;}
+
+ if(sceneVis('S',t)){
+  for(const p of sparts){const x=((p.x+p.vx*t)%1960+1960)%1960-20,y=((p.y+p.vy*t)%1100+1100)%1100-10;p.d.style.transform=`translate(${x}px,${y}px)`;p.d.style.opacity=p.o*(.6+.4*Math.sin(t*1.3+p.ph))}
+  rise($('S_head'),t,sc('S')+.35,.9,30);
+  const cA=W('s1','duzentos');rise($('S_count'),t,cA-.5,.8,30);$('S_v').textContent=Math.round(200*eo(P(t,cA,cA+1.4)));
+  pop($('S_c0'),t,W('s2','área')-.2);pop($('S_c1'),t,W('s2','estratégias')-.1);
+  const MT=[W('s2','fundamentos'),0,W('s2','prática'),W('s2','ética'),W('s2','governança')+.35];MT[1]=(MT[0]+MT[2])/2;
+  const tp=$('S_tp');tp.style.opacity=P(t,MT[0]-.6,MT[0]);tp.style.clipPath=`inset(0 ${100-100*eio(P(t,MT[0]-.6,MT[4]+.2))}% 0 0)`;
+  modEls.forEach((m,i)=>{const p=rise(m,t,MT[i]-.15,.7,26);const g=Math.sin(Math.PI*P(t,MT[i],MT[i]+.9));m.querySelector('.mc').style.boxShadow=`0 0 ${40*g}px rgba(255,138,61,${.6*g})`});}
+
+ if(sceneVis('E',t)){rise($('E_win'),t,sc('E')+.1,.9,40);rise($('E_text'),t,sc('E')+.4,.9,30);pop($('E_status'),t,sc('E')+1.0,.5);
+  rise($('E_lead'),t,W('e1','próprios')-.3,.7,20);
+  [W('e1','automações'),W('e1','formulários'),W('e1','aplicações'),W('e1','baixo'),W('e1','inteligência')].forEach((a,i)=>pop($('E_c'+i),t,a-.1,.5));
+  const bt=[W('e1','automações')-.4,W('e1','automações')+.3,W('e1','formulários')-.1,W('e1','formulários')+.6,W('e1','aplicações'),S1('e1')-.2];
+  const palY=[66,124,182,240,298,298];
+  for(let i=0;i<6;i++){const b=$('E_b'+i);const p=eo5(P(t,bt[i],bt[i]+.75));const dx=(26-250)*(1-p),dy=(52+palY[i]-parseFloat(b.style.top))*(1-p);
+   b.style.opacity=clamp(p*3);b.style.transform=`translate(${dx}px,${dy}px) scale(${lerp(.3,1,p)})`;b.style.transformOrigin='left top';b.style.boxShadow=p<1&&p>0?'0 18px 40px rgba(0,0,0,.18)':'none'}
+  let ci=0;for(let i=0;i<6;i++)if(t>=bt[i])ci=i;const cp=eo5(P(t,bt[ci],bt[ci]+.75));const tb=$('E_b'+ci);
+  const cu=$('E_cursor');cu.style.left=lerp(110,parseFloat(tb.style.left)+parseFloat(tb.style.width)*.55,cp)+'px';cu.style.top=lerp(52+palY[ci]+20,parseFloat(tb.style.top)+30,cp)+'px';cu.style.opacity=P(t,bt[0]-.4,bt[0])*(1-P(t,se('E')-.6,se('E')-.2));
+  const txt='Resumo gerado: pedido de suporte ao PJe da 2ª Vara, prioridade média.';const ta=W('e1','inteligência');
+  $('E_type').textContent=txt.slice(0,Math.floor(txt.length*P(t,ta,ta+2.0)));$('E_caret').style.opacity=(Math.floor(t*2.2)%2===0||(t>ta&&t<ta+2))?1:0;}
+
+ if(sceneVis('J',t)){rise($('J_text'),t,sc('J')+.1,.9,30);rise($('J_lead'),t,W('j1','tornando')-.3,.8,20);
+  [...$('J_tags').children].forEach((c,i)=>pop(c,t,W('j1',i?'barreiras':'linguagem')-.1,.5));
+  rise($('J_vis'),t,sc('J')+.4,.9,30);
+  const p0=$('J_p');const pr=eio(P(t,S0('j2')-.2,W('j2','deu origem')));p0.style.strokeDasharray=JL;p0.style.strokeDashoffset=JL*(1-pr);
+  const av=$('J_av');const pt=p0.getPointAtLength(JL*pr);av.style.left=pt.x+'px';av.style.top=pt.y+'px';av.style.opacity=P(t,S0('j2')-.6,S0('j2')-.2);
+  jst.forEach((s,i)=>{const on=pr>=JF[i]-.02;const k=P(t,sc('J')+.8+i*.15,sc('J')+1.3+i*.15);s.style.opacity=k;s.style.transform=`scale(${lerp(.5,1,back(k))*(on?1.08:1)})`;
+   s.style.background=on?'#D41876':'#fff';s.style.borderColor=on?'#D41876':'#e9c3d6';s.style.color=on?'#fff':'#c9a0b5'});
+  pop($('J_f0'),t,W('j2','simulação')-.1,.6);pop($('J_f1'),t,W('j2','alternância')-.1,.6);pop($('J_f2'),t,W('j2','relatos')-.1,.6);
+  const g=W('j2','guia');const gp=P(t,g-.2,g+.6);$('J_guide').style.opacity=clamp(gp*2.5);$('J_guide').style.transform=`translateY(${(1-eo5(gp))*40}px) scale(${lerp(.85,1,back(gp))})`;
+  [...$('J_guide').querySelectorAll('.jq')].forEach((q,i)=>slide(q,t,g+.4+i*.25,.5,-20));}
+
+ if(sceneVis('F',t)){const f0=sc('F');rise($('F_head'),t,f0+.1,.9,30);$('F_row').style.transform=`translateX(${150-(t-f0)*62}px)`;
+  const h1=W('f1','mandado'),h2=W('f1','teatro');
+  pcards.forEach((c,i)=>{const p=eo5(P(t,f0+.3+i*.12,f0+1.1+i*.12));const hl=i===0?P(t,h1-.2,h1+.2)*(1-P(t,h1+1.6,h1+2)):i===1?P(t,h2-.2,h2+.2)*(1-P(t,h2+2,h2+2.4)):0;
+   c.style.opacity=p;c.style.transform=`translateY(${(1-p)*60-hl*16}px) scale(${1+hl*.07})`;c.style.boxShadow=`0 ${14+hl*20}px ${40+hl*30}px rgba(0,0,0,${.05+hl*.08})`;c.style.borderColor=hl>0?PR[i][2]:'';c.style.zIndex=hl>0?2:1});}
+
+ if(sceneVis('G',t)){const g0=sc('G');const lg=eo5(P(t,g0+.1,g0+1.2));$('G_logo').style.opacity=lg;$('G_logo').style.transform=`translateY(${(1-lg)*30}px) scale(${lerp(.94,1,lg)})`;
+  G_w.forEach((w,i)=>{const p=eo5(P(t,S0('g1')+.4+i*.11,S0('g1')+1.3+i*.11));w.style.transform=`translateY(${(1-p)*110}%)`;w.style.opacity=p});
+  [['g1',W('g1','eficiente'),'#00A0E3'],['g2',W('g1','acessível'),'#7AB648'],['g3',W('g1','pessoas'),'#D41876']].forEach(([c,a,col])=>{$('G_t').querySelector('.'+c).style.color=t>=a?col:'var(--ink)'});
+  $('G_bar').style.transform=`scaleX(${eo5(P(t,W('g1','acessível')+.4,W('g1','acessível')+1.6))})`;}
+
+ if(sceneVis('H',t)){const h=HS-83.0;
+  const pieces={tl:[-1,-1,-28,83.35],tr:[1,-1,24,83.5],bl:[-1,1,24,83.65],br:[1,1,-28,83.8]};
+  for(const k in pieces){const [dx,dy,r,a0]=pieces[k];const a=a0+h;const p=ex(P(t,a,a+1.25));const el=$('H_'+k);
+   el.style.opacity=clamp(P(t,a,a+.45));el.style.transform=`translate(${dx*(1-p)*330}px,${dy*(1-p)*330}px) rotate(${r*(1-p)}deg) scale(${lerp(.7,1,p)})`;
+   el.style.transformOrigin=`${SCX-parseFloat(el.style.left)}px ${SCY-parseFloat(el.style.top)}px`;}
+  [['H_c1',84.75,1.6,420],['H_c2',84.95,1.8,560]].forEach(([id,a,d,R])=>{const c=$(id);const p=P(t,a+h,a+h+d);c.setAttribute('cx',SCX);c.setAttribute('cy',SCY);c.setAttribute('r',20+eo(p)*R*LS*1.3);c.style.opacity=(p>0&&p<1)?(1-p)*.35:0});
+  const t1=eo5(P(t,85.15+h,86.4+h));$('H_t1c').style.clipPath=`inset(0 ${(1-t1)*50}% 0 ${(1-t1)*50}%)`;$('H_t1').style.opacity=t1;$('H_t1').style.transform=`scale(${lerp(1.04,1,t1)})`;
+  const t2=eo5(P(t,85.9+h,86.9+h));$('H_t2').style.opacity=t2;$('H_t2').style.transform=`translateY(${(1-t2)*18}px)`;
+  $('H_wrap').style.transform=`scale(${lerp(1,1.035,eio(P(t,84.6+h,90+h)))})`;$('H_wrap').style.opacity=1-P(t,89.45+h,89.95+h);}
+};
+window.ready=document.fonts.ready.then(()=>Promise.all([...document.images].map(i=>i.complete?1:new Promise(r=>i.onload=r))));
+</script>
+</body></html>
