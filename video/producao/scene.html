@@ -1,0 +1,399 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<link rel="stylesheet" href="fonts.local.css">
+<script src="timing.js"></script>
+<style>
+:root{--magenta:#D41876;--green:#7AB648;--blue:#00A0E3;--orange:#F7941D;--purple:#9B3A8E;--ink:#121212;--sub:#484848;--muted:#8a8a8a;--border:#E6E6E2;
+--serif:'Cormorant Garamond',Georgia,serif;--sans:'Plus Jakarta Sans',sans-serif;--mono:'JetBrains Mono',monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{font-variant-numeric:lining-nums;width:1920px;height:1080px;overflow:hidden;background:#fff;font-family:var(--sans);color:var(--ink);-webkit-font-smoothing:antialiased}
+#stage{position:absolute;inset:0;overflow:hidden;background:radial-gradient(ellipse 120% 90% at 50% 40%,#ffffff 55%,#f6f6f3 100%)}
+.abs{position:absolute}
+.scene{position:absolute;inset:0;opacity:0;will-change:opacity,transform}
+.tag{font-family:var(--mono);font-size:19px;letter-spacing:5px;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:16px}
+.tag::before{content:'';width:42px;height:2px;background:currentColor;display:block}
+.title{font-variant-numeric:lining-nums;font-family:var(--serif);font-weight:500;color:var(--ink);letter-spacing:-1px;line-height:1.02}
+.title em{font-style:italic;color:var(--magenta)}
+.word{display:inline-block;will-change:transform,opacity}
+.mask{display:inline-block;overflow:hidden;vertical-align:bottom;padding-bottom:.12em;margin-bottom:-.12em}
+/* chrome */
+#topbar{position:absolute;left:0;top:0;width:100%;height:8px;display:flex}
+#topbar span{flex:1;transform-origin:left}
+#brand{position:absolute;left:72px;top:46px;font-family:var(--mono);font-size:17px;letter-spacing:4px;color:#9a9a9a;text-transform:uppercase}
+#brand b{color:var(--ink);font-weight:500}
+#sub{position:absolute;left:0;right:0;margin:0 auto;width:fit-content;bottom:58px;max-width:1600px;text-align:center;
+ background:rgba(18,18,18,.86);color:#fff;font-weight:600;font-size:42px;line-height:1.32;padding:16px 34px 18px;border-radius:16px;opacity:0;text-wrap:balance;
+ box-shadow:0 10px 40px rgba(0,0,0,.12)}
+/* bubbles */
+.bub{position:absolute;will-change:transform}
+/* scene A */
+.pill{display:inline-flex;align-items:center;gap:14px;font-size:34px;font-weight:600;padding:16px 34px;border-radius:999px;color:#fff}
+/* numbers */
+.num-col{position:absolute;top:330px;width:460px;text-align:center}
+.num-col .bar{height:6px;border-radius:3px;margin:0 auto 34px;width:0}
+.num-col .n{font-family:var(--serif);font-weight:500;font-size:230px;line-height:.9;letter-spacing:-4px}
+.num-col .l{font-size:34px;color:var(--sub);margin-top:22px;font-weight:500}
+/* cards */
+.card{position:absolute;background:#fff;border:1.5px solid var(--border);border-radius:22px;box-shadow:0 18px 50px rgba(0,0,0,.06);overflow:hidden;padding:40px 36px}
+.card .cbar{position:absolute;left:0;top:0;height:100%;width:9px}
+.card .lab{font-family:var(--mono);font-size:18px;letter-spacing:4px;font-weight:500;margin-bottom:22px}
+.card h3{font-family:var(--serif);font-weight:600;font-size:44px;line-height:1.05;letter-spacing:-.5px;margin-bottom:18px}
+.card p{font-size:21px;line-height:1.5;color:var(--sub)}
+.badge{display:inline-block;background:var(--magenta);color:#fff;font-family:var(--mono);font-size:16px;letter-spacing:3px;padding:7px 14px;border-radius:999px;margin-left:12px;vertical-align:middle}
+.chip{display:inline-flex;align-items:center;gap:12px;border:2px solid currentColor;border-radius:999px;padding:12px 24px;font-size:25px;font-weight:600;margin:0 12px 14px 0;background:#fff}
+.chip i{width:12px;height:12px;border-radius:50%;background:currentColor;display:block}
+/* checklist */
+.check{display:flex;align-items:center;gap:24px;font-size:36px;font-weight:500;color:var(--ink);margin-bottom:30px}
+.check .ck{width:54px;height:54px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:none}
+/* flow */
+.node{position:absolute;width:250px;height:96px;border-radius:20px;border:2.5px solid #d6dde3;background:#fff;display:flex;align-items:center;justify-content:center;font-size:25px;font-weight:600;color:var(--sub);box-shadow:0 10px 30px rgba(0,0,0,.05)}
+.node .auto{position:absolute;top:-16px;right:-14px;background:var(--green);color:#fff;font-size:14px;font-family:var(--mono);letter-spacing:2px;padding:6px 10px;border-radius:999px;opacity:0}
+/* window */
+.win{position:absolute;background:#fff;border-radius:22px;border:1.5px solid var(--border);box-shadow:0 30px 80px rgba(0,0,0,.10);overflow:hidden}
+.win .wbar{height:52px;background:#F4F4F1;display:flex;align-items:center;gap:10px;padding:0 22px;border-bottom:1.5px solid var(--border)}
+.win .wbar i{width:14px;height:14px;border-radius:50%;display:block}
+.win .wbar span{margin-left:18px;font-family:var(--mono);font-size:16px;color:#999;letter-spacing:1px}
+.blk{position:absolute;border-radius:12px;will-change:transform,opacity}
+/* project cards */
+.pcard{position:absolute;top:0;width:330px;height:210px;background:#fff;border:1.5px solid var(--border);border-radius:20px;padding:30px 28px;box-shadow:0 14px 40px rgba(0,0,0,.05);overflow:hidden}
+.pcard .pb{position:absolute;left:0;top:0;width:100%;height:8px}
+.pcard h4{font-family:var(--serif);font-size:38px;font-weight:600;line-height:1.05;margin:10px 0 14px;letter-spacing:-.3px}
+.pcard span{font-family:var(--mono);font-size:15px;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}
+/* closing */
+#H{background:#fff}
+.lp{position:absolute;mix-blend-mode:multiply;will-change:transform,opacity}
+</style></head>
+<body><div id="stage">
+<div id="bubbles"></div>
+
+<!-- A: Quem somos -->
+<div class="scene" id="A">
+ <div class="abs" style="left:0;right:0;top:250px;text-align:center">
+  <div class="tag" id="A_tag" style="justify-content:center">Quem somos</div>
+  <div class="title" id="A_title" style="font-size:150px;margin-top:34px"></div>
+  <div id="A_subt" style="font-size:40px;color:var(--sub);margin-top:30px;font-weight:400">O Laboratório de Inovação da <b style="font-weight:600;color:var(--ink)">Justiça Federal no Ceará</b></div>
+  <div id="A_since" style="margin-top:46px;display:flex;align-items:center;justify-content:center;gap:26px">
+   <span id="A_l1" style="height:2px;width:160px;background:#d0d0ca;transform-origin:right"></span>
+   <span style="font-family:var(--serif);font-style:italic;font-size:46px;color:var(--ink)">desde <b style="font-weight:600;font-style:normal">2019</b></span>
+   <span id="A_l2" style="height:2px;width:160px;background:#d0d0ca;transform-origin:left"></span>
+  </div>
+  <div style="margin-top:44px;display:flex;justify-content:center;gap:26px">
+   <span class="pill" id="A_p1" style="background:var(--blue)">Método</span>
+   <span class="pill" id="A_p2" style="background:var(--green)">Ciência</span>
+   <span class="pill" id="A_p3" style="background:var(--magenta)">Humanização</span>
+  </div>
+ </div>
+</div>
+
+<!-- B: números -->
+<div class="scene" id="B">
+ <div class="tag abs" id="B_tag" style="left:0;right:0;top:190px;justify-content:center">Em números</div>
+ <div class="num-col" id="B_c1" style="left:150px"><div class="bar" style="background:var(--blue)"></div><div class="n"><span class="v">0</span><span style="color:var(--blue)">+</span></div><div class="l">servidores capacitados</div></div>
+ <div class="num-col" id="B_c2" style="left:730px"><div class="bar" style="background:var(--green)"></div><div class="n"><span class="v">0</span><span style="color:var(--green)">+</span></div><div class="l">projetos</div></div>
+ <div class="num-col" id="B_c3" style="left:1310px"><div class="bar" style="background:var(--magenta)"></div><div class="n"><span class="v">0</span></div><div class="l">eixos de atuação</div></div>
+</div>
+
+<!-- C: eixos -->
+<div class="scene" id="C">
+ <div class="abs" id="C_head" style="left:140px;top:120px">
+  <div class="tag">Frentes de atuação</div>
+  <div class="title" style="font-size:104px;margin-top:20px">Nossos <em>Eixos</em></div>
+ </div>
+ <div class="card" id="C_1"><div class="cbar" style="background:var(--blue)"></div><div class="lab" style="color:var(--blue)">EIXO I</div><h3>PJe e Automação de Fluxos</h3><p>Automação de fluxos processuais e capacitação.</p></div>
+ <div class="card" id="C_2"><div class="cbar" style="background:var(--green)"></div><div class="lab" style="color:var(--green)">EIXO II</div><h3>Segurança no Tratamento de Dados</h3><p>Governança de dados pessoais e LGPD.</p></div>
+ <div class="card" id="C_3"><div class="cbar" style="background:var(--orange)"></div><div class="lab" style="color:var(--orange)">EIXO III</div><h3>Tecnologia e Inteligência Artificial</h3><p>IA generativa, automação e ciência de dados.</p></div>
+ <div class="card" id="C_4"><div class="cbar" style="background:var(--magenta)"></div>
+  <div class="lab" style="color:var(--magenta)">EIXO IV <span class="badge" id="C_new">NOVO</span></div>
+  <h3 id="C_4h">Linguagem Simples e Acessibilidade</h3>
+  <p id="C_4p">Comunicação clara e inclusão para todas as pessoas.</p>
+  <div id="C_4x" style="position:absolute;left:56px;right:56px;bottom:52px">
+   <div style="font-family:var(--mono);font-size:17px;letter-spacing:3px;color:var(--muted);margin-bottom:22px">PORTARIA DA DIREÇÃO DO FORO Nº 139/2026</div>
+   <div id="C_chips">
+    <span class="chip" style="color:var(--magenta)"><i></i>Linguagem simples</span><span class="chip" style="color:var(--blue)"><i></i>Libras</span><span class="chip" style="color:var(--green)"><i></i>Audiodescrição</span><span class="chip" style="color:var(--orange)"><i></i>Leitura fácil</span><span class="chip" style="color:var(--purple)"><i></i>Acessibilidade digital</span>
+   </div>
+  </div>
+ </div>
+</div>
+
+<!-- D: Laboratório de Fluxos -->
+<div class="scene" id="D">
+ <div class="abs" id="D_text" style="left:130px;top:170px;width:820px">
+  <div class="tag" style="color:var(--blue)">Destaque · Eixo I</div>
+  <div class="title" style="font-size:108px;margin-top:26px">Laboratório<br>de Fluxos <em style="color:var(--blue)">do PJe</em></div>
+  <div style="margin-top:56px">
+   <div class="check" id="D_k1"><span class="ck" style="background:var(--blue)"><svg width="26" height="26" viewBox="0 0 26 26"><path d="M5 13.5l5 5 11-12" stroke="#fff" stroke-width="3.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Automação de peças repetitivas</div>
+   <div class="check" id="D_k2"><span class="ck" style="background:var(--blue)"><svg width="26" height="26" viewBox="0 0 26 26"><path d="M5 13.5l5 5 11-12" stroke="#fff" stroke-width="3.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Redesenho de fluxos processuais</div>
+   <div class="check" id="D_k3"><span class="ck" style="background:var(--blue)"><svg width="26" height="26" viewBox="0 0 26 26"><path d="M5 13.5l5 5 11-12" stroke="#fff" stroke-width="3.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Alcance nacional</div>
+  </div>
+ </div>
+ <div class="abs" id="D_flow" style="left:1010px;top:150px;width:800px;height:760px">
+  <svg class="abs" style="left:0;top:0" width="800" height="760"><path id="D_path" d="M135 98 H665 V378 H135 V658 H665" fill="none" stroke="#cfe8f6" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+   <path id="D_path2" d="M135 98 H665 V378 H135 V658 H665" fill="none" stroke="var(--blue)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+   <circle id="D_dot" r="15" fill="var(--blue)"/><circle id="D_dotg" r="34" fill="var(--blue)" opacity=".18"/></svg>
+  <div class="node" id="D_n0" style="left:10px;top:50px">Distribuição<span class="auto">AUTO</span></div>
+  <div class="node" id="D_n1" style="left:540px;top:50px">Triagem<span class="auto">AUTO</span></div>
+  <div class="node" id="D_n2" style="left:540px;top:330px">Minuta<span class="auto">AUTO</span></div>
+  <div class="node" id="D_n3" style="left:10px;top:330px">Assinatura<span class="auto">AUTO</span></div>
+  <div class="node" id="D_n4" style="left:10px;top:610px">Intimação<span class="auto">AUTO</span></div>
+  <div class="node" id="D_n5" style="left:540px;top:610px;width:250px">Cumprimento<span class="auto">AUTO</span></div>
+ </div>
+</div>
+
+<!-- E: Lab Low Code -->
+<div class="scene" id="E">
+ <div class="win" id="E_win" style="left:120px;top:170px;width:860px;height:680px">
+  <div class="wbar"><i style="background:#ff6058"></i><i style="background:#ffbd2e"></i><i style="background:#29c940"></i><span>lab-low-code · nova aplicação</span></div>
+  <div class="abs" style="left:0;top:52px;width:200px;bottom:0;background:#FAFAF8;border-right:1.5px solid var(--border)">
+   <div style="font-family:var(--mono);font-size:14px;letter-spacing:2px;color:#aaa;margin:26px 0 0 26px">COMPONENTES</div>
+   <div class="blk" style="left:26px;top:66px;width:148px;height:44px;background:#e8f5fc"></div>
+   <div class="blk" style="left:26px;top:124px;width:148px;height:44px;background:#eef6e6"></div>
+   <div class="blk" style="left:26px;top:182px;width:148px;height:44px;background:#fdf0e1"></div>
+   <div class="blk" style="left:26px;top:240px;width:148px;height:44px;background:#fbe5ef"></div>
+   <div class="blk" style="left:26px;top:298px;width:148px;height:44px;background:#f1e6f0"></div>
+  </div>
+  <div id="E_canvas" class="abs" style="left:200px;top:52px;right:0;bottom:0;background-image:radial-gradient(#e4e4df 1.4px,transparent 1.4px);background-size:26px 26px"></div>
+  <div class="blk" id="E_b0" style="left:250px;top:100px;width:560px;height:70px;background:var(--green);display:flex;align-items:center;padding-left:26px;color:#fff;font-size:26px;font-weight:700">Solicitação de Serviço</div>
+  <div class="blk" id="E_b1" style="left:250px;top:196px;width:560px;height:66px;border:2px solid #d9d9d4;background:#fff;display:flex;align-items:center;padding-left:22px;color:#999;font-size:22px">Nome do solicitante</div>
+  <div class="blk" id="E_b2" style="left:250px;top:280px;width:560px;height:66px;border:2px solid #d9d9d4;background:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 22px;color:#999;font-size:22px">Unidade <span style="color:#bbb">▾</span></div>
+  <div class="blk" id="E_b3" style="left:250px;top:364px;width:560px;height:66px;display:flex;align-items:center;gap:18px;font-size:22px;color:var(--sub)"><span style="width:66px;height:36px;border-radius:18px;background:var(--green);position:relative;display:block"><span style="position:absolute;right:4px;top:4px;width:28px;height:28px;border-radius:50%;background:#fff"></span></span>Notificar por e-mail</div>
+  <div class="blk" id="E_b4" style="left:250px;top:450px;width:560px;height:112px;border:2px dashed var(--purple);background:#faf4f9;padding:16px 20px;font-size:21px;color:var(--ink)"><div style="font-family:var(--mono);font-size:14px;letter-spacing:2px;color:var(--purple);margin-bottom:8px">✦ IA GENERATIVA</div><span id="E_type"></span><span id="E_caret" style="display:inline-block;width:2px;height:24px;background:var(--purple);vertical-align:middle;margin-left:2px"></span></div>
+  <div class="blk" id="E_b5" style="left:590px;top:586px;width:220px;height:62px;background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:center;font-size:23px;font-weight:600">Publicar</div>
+  <svg id="E_cursor" class="abs" width="44" height="44" viewBox="0 0 24 24" style="left:0;top:0"><path d="M4 2l15 9-6.5 1.6L16 20l-3 1.4-3.6-7.3L4 18z" fill="#121212" stroke="#fff" stroke-width="1.3"/></svg>
+ </div>
+ <div class="abs" id="E_text" style="left:1060px;top:190px;width:760px">
+  <div class="tag" style="color:var(--green)">Destaque · Eixo III</div>
+  <div class="title" style="font-size:122px;margin-top:24px">Lab <em style="color:var(--green)">Low Code</em></div>
+  <div id="E_status" style="margin-top:24px;display:inline-flex;align-items:center;gap:12px;font-family:var(--mono);font-size:18px;letter-spacing:3px;color:var(--orange);border:2px solid var(--orange);border-radius:999px;padding:9px 18px"><span style="width:10px;height:10px;border-radius:50%;background:var(--orange)"></span>EM IMPLANTAÇÃO · 2026</div>
+  <div id="E_lead" style="font-size:36px;line-height:1.35;color:var(--sub);margin-top:40px">Soluções digitais criadas <b style="color:var(--ink)">pelos próprios servidores</b>.</div>
+  <div style="margin-top:38px">
+   <span class="chip" id="E_c0" style="color:var(--blue)"><i></i>Automações</span><span class="chip" id="E_c1" style="color:var(--green)"><i></i>Formulários inteligentes</span><span class="chip" id="E_c2" style="color:var(--orange)"><i></i>Aplicações</span><span class="chip" id="E_c3" style="color:var(--magenta)"><i></i>Baixo código</span><span class="chip" id="E_c4" style="color:var(--purple)"><i></i>IA generativa</span>
+  </div>
+ </div>
+</div>
+
+<!-- F: projetos -->
+<div class="scene" id="F">
+ <div class="abs" id="F_head" style="left:0;right:0;top:170px;text-align:center">
+  <div class="tag" style="justify-content:center">Projetos</div>
+  <div class="title" style="font-size:96px;margin-top:22px">Inovação que chega<br>a <em>quem mais precisa</em></div>
+ </div>
+ <div class="abs" id="F_row" style="left:0;top:600px;height:240px;width:4000px"></div>
+</div>
+
+<!-- G: tagline -->
+<div class="scene" id="G">
+ <img id="G_logo" src="assets/logo-inovajus.png" class="abs" style="left:50%;top:120px;width:740px;margin-left:-370px">
+ <div class="title abs" id="G_t" style="left:0;right:0;top:560px;text-align:center;font-size:100px;line-height:1.08"></div>
+ <div class="abs" id="G_bar" style="left:50%;top:840px;width:520px;margin-left:-260px;height:8px;display:flex;border-radius:4px;overflow:hidden">
+  <span style="flex:1;background:var(--magenta)"></span><span style="flex:1;background:var(--orange)"></span><span style="flex:1;background:var(--green)"></span><span style="flex:1;background:var(--blue)"></span><span style="flex:1;background:var(--purple)"></span></div>
+</div>
+
+<!-- chrome -->
+<div id="topbar"><span style="background:var(--magenta)"></span><span style="background:var(--orange)"></span><span style="background:var(--green)"></span><span style="background:var(--blue)"></span><span style="background:var(--purple)"></span></div>
+<div id="brand"><b>Inovajus</b> · Laboratório de Inovação da JFCE</div>
+<div id="sub"></div>
+
+<!-- H: JFCE -->
+<div class="scene" id="H">
+ <div class="abs" id="H_wrap" style="left:0;top:0;width:1920px;height:1080px;transform-origin:960px 540px">
+  <svg class="abs" id="H_ring" width="1920" height="1080" style="left:0;top:0"><circle id="H_c1" cx="0" cy="0" r="10" fill="none" stroke="#3f5aa8" stroke-width="3"/><circle id="H_c2" cx="0" cy="0" r="10" fill="none" stroke="#3c9a68" stroke-width="2"/></svg>
+  <img class="lp" id="H_tl" src="assets/p_tl.png"><img class="lp" id="H_tr" src="assets/p_tr.png">
+  <img class="lp" id="H_bl" src="assets/p_bl.png"><img class="lp" id="H_br" src="assets/p_br.png">
+  <div class="abs" id="H_t1c" style="overflow:hidden"><img class="lp" id="H_t1" src="assets/t1.png" style="position:absolute;left:0;top:0"></div>
+  <img class="lp" id="H_t2" src="assets/t2.png">
+ </div>
+</div>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+const clamp=(x,a=0,b=1)=>Math.min(b,Math.max(a,x));
+const P=(t,a,b)=>clamp((t-a)/(b-a));
+const eo=x=>1-Math.pow(1-x,3), eo5=x=>1-Math.pow(1-x,5), eio=x=>x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2;
+const ex=x=>x>=1?1:1-Math.pow(2,-10*x);
+const back=x=>{const c1=1.4,c3=c1+1;return 1+c3*Math.pow(x-1,3)+c1*Math.pow(x-1,2)};
+const lerp=(a,b,x)=>a+(b-a)*x;
+function rise(el,t,a,d=0.8,dist=40){const p=eo5(P(t,a,a+d));el.style.opacity=p;el.style.transform=`translateY(${(1-p)*dist}px)`;return p}
+function pop(el,t,a,d=0.55){const p=P(t,a,a+d);el.style.opacity=clamp(p*2.5);el.style.transform=`scale(${lerp(.6,1,back(p))})`;return p}
+
+/* ---------- build words ---------- */
+function words(el,html){el.innerHTML=html.map(w=>`<span class="mask"><span class="word">${w}</span></span>`).join(' ');return [...el.querySelectorAll('.word')]}
+const A_w=words($('A_title'),['Inovação','com','<em>propósito</em>']);
+$('G_t').innerHTML='<div id="G_l1"></div><div id="G_l2"></div>';
+const G_w=[...words($('G_l1'),['Uma','Justiça','mais','<em class="g1">eficiente,</em>','<em class="g2">acessível</em>']),...words($('G_l2'),['e','centrada','nas','<em class="g3">pessoas.</em>'])];
+G_w.forEach(w=>{const e=w.querySelector('em');if(e){e.style.color='var(--ink)';e.style.transition='none'}});
+
+/* bubbles */
+const BC=['#D41876','#7AB648','#00A0E3','#F7941D','#9B3A8E'];
+let seed=7;const rnd=()=>{seed=(seed*16807)%2147483647;return seed/2147483647};
+const bubbles=[];
+for(let i=0;i<16;i++){
+ const s=40+rnd()*110, c=BC[i%5], round=rnd()>.5;
+ const svg=round?`<svg width="${s}" height="${s}" viewBox="0 0 100 100"><path d="M50 8a40 38 0 1 1-22 70L12 90l6-20A40 38 0 0 1 50 8z" fill="${c}"/></svg>`
+  :`<svg width="${s}" height="${s}" viewBox="0 0 100 100"><path d="M14 14h72a8 8 0 0 1 8 8v44a8 8 0 0 1-8 8H44L26 90V74H14a8 8 0 0 1-8-8V22a8 8 0 0 1 8-8z" fill="${c}"/></svg>`;
+ const d=document.createElement('div');d.className='bub';d.innerHTML=svg;$('bubbles').appendChild(d);
+ bubbles.push({d,x:rnd()*1920,y:rnd()*1080,vx:(rnd()-.5)*14,vy:-6-rnd()*12,ph:rnd()*6.28,r:(rnd()-.5)*30,o:.05+rnd()*.05});
+}
+
+/* projects */
+const PR=[['Mandado Cidadão','Legal Design','#D41876'],['Teatro PopRua','Arte e cidadania','#F7941D'],['Linguagem Simples','Formação e oficinas','#7AB648'],
+['PID — Jornada do Usuário','Design de serviço','#00A0E3'],['HubJus Maracanaú','Design de espaços','#9B3A8E'],['Bolsa Débora Aguiar','Bolsas de estudo','#D41876'],
+['Banco de Talentos','Metodologia ágil','#7AB648'],['Você Gestor','Design Thinking','#F7941D']];
+const pcards=PR.map((p,i)=>{const d=document.createElement('div');d.className='pcard';d.style.left=(i*370)+'px';
+ d.innerHTML=`<div class="pb" style="background:${p[2]}"></div><span>${p[1]}</span><h4>${p[0]}</h4>`;$('F_row').appendChild(d);return d});
+
+/* closing logo geometry (source space 1788px) */
+const fetchMeta={"br":[886,662,387,370],"tl":[482,401,387,370],"bl":[484,785,387,367],"tr":[885,279,385,369],"t1":[100,1195,1580,200],"t2":[100,1395,1580,135]};
+const LS=0.5, LBX=141, LBY=279, LBW=1480, LBH=1238;
+const LOX=960-(LBX+LBW/2)*LS, LOY=530-(LBY+LBH/2)*LS;
+function place(el,k){const m=fetchMeta[k];el.style.left=(LOX+m[0]*LS)+'px';el.style.top=(LOY+m[1]*LS)+'px';el.style.width=(m[2]*LS)+'px';el.style.height=(m[3]*LS)+'px'}
+['tl','tr','bl','br','t2'].forEach(k=>place($('H_'+k),k));
+place($('H_t1c'),'t1');$('H_t1').style.width=(1580*LS)+'px';$('H_t1').style.height=(200*LS)+'px';
+const SCX=LOX+875*LS, SCY=LOY+720*LS;
+
+/* card geometry */
+const CW=387,CH=400,CT=400,CL=140,CG=30;
+function cardRect(i){return [CL+i*(CW+CG),CT,CW,CH]}
+const FOCUS=[300,215,1320,600];
+
+const SCN={A:[7.2,20.8],B:[20.8,28.4],C:[28.4,44.8],D:[44.8,56.3],E:[56.3,69.3],F:[69.3,76.0],G:[76.0,83.0],H:[83.0,99]};
+function sceneVis(id,t){const [s,e]=SCN[id];const el=$(id);
+ const fi=id==='A'?1:eio(P(t,s-.35,s+.35)), fo=1-eio(P(t,e-.35,e+.35));
+ const o=Math.min(fi,fo);el.style.opacity=o;el.style.visibility=o<=0.001?'hidden':'visible';
+ const y=(1-fi)*24-(1-fo)*24; el.style.transform=`translateY(${y}px)`;return o>0.001}
+
+window.render=function(t){
+ // background bubbles
+ for(const b of bubbles){const x=((b.x+b.vx*t)%2100+2100)%2100-90, y=((b.y+b.vy*t)%1260+1260)%1260-90;
+  b.d.style.transform=`translate(${x+Math.sin(t*.4+b.ph)*18}px,${y}px) rotate(${b.r+Math.sin(t*.3+b.ph)*6}deg)`;b.d.style.opacity=b.o*(t>82.6?1-P(t,82.6,83.2):1)*P(t,7.2,8.6)}
+ // top bar & brand
+ const tb=[...$('topbar').children];tb.forEach((s,i)=>{s.style.transform=`scaleX(${eo5(P(t,7.6+i*.08,8.6+i*.08))})`});
+ const chromeOut=1-P(t,82.6,83.1);$('topbar').style.opacity=chromeOut;
+ const br=eo(P(t,8.2,9.0));$('brand').style.opacity=br*chromeOut;$('brand').style.transform=`translateX(${(1-br)*-20}px)`;
+ // subtitles
+ const sub=$('sub');let cue=null;for(const c of TIMING.cues){if(t>=c[0]-0.12&&t<c[1]+0.12){cue=c;break}}
+ if(cue){if(sub.dataset.k!==cue[2]){sub.textContent=cue[2];sub.dataset.k=cue[2]}
+  const o=Math.min(P(t,cue[0]-0.12,cue[0]+0.08),1-P(t,cue[1]-0.08,cue[1]+0.12));sub.style.opacity=o;}else sub.style.opacity=0;
+
+ /* A */
+ if(sceneVis('A',t)){
+  rise($('A_tag'),t,8.0,.8,20);
+  A_w.forEach((w,i)=>{const p=eo5(P(t,8.25+i*.16,9.25+i*.16));w.style.transform=`translateY(${(1-p)*110}%)`;w.style.opacity=p});
+  rise($('A_subt'),t,9.3,.9,26);
+  const s=eo5(P(t,14.0,15.0));$('A_since').style.opacity=s;$('A_l1').style.transform=`scaleX(${s})`;$('A_l2').style.transform=`scaleX(${s})`;
+  pop($('A_p1'),t,17.9);pop($('A_p2'),t,18.45);pop($('A_p3'),t,19.0);
+  const out=P(t,20.3,21.1);$('A').querySelector('.abs').style.transform=`translateY(${-eio(out)*40}px)`;
+ }
+ /* B */
+ if(sceneVis('B',t)){
+  rise($('B_tag'),t,20.9,.7,16);
+  [[1,21.9,150],[2,24.2,11],[3,25.1,4]].forEach(([i,a,v])=>{const c=$('B_c'+i);const p=rise(c,t,a-.25,.8,50);
+   c.querySelector('.bar').style.width=(eo5(P(t,a-.1,a+.9))*120)+'px';
+   c.querySelector('.v').textContent=Math.round(v*eo(P(t,a,a+1.3)))});
+ }
+ /* C */
+ if(sceneVis('C',t)){
+  rise($('C_head'),t,28.5,.8,24);
+  const starts=[29.0,31.85,34.75,37.85];
+  const f=eio(P(t,40.0,41.2)); // focus
+  for(let i=0;i<4;i++){const el=$('C_'+(i+1));const p=eo5(P(t,starts[i],starts[i]+.85));
+   let [x,y,w,h]=cardRect(i);
+   if(i<3){el.style.left=x+'px';el.style.top=y+'px';el.style.width=w+'px';el.style.height=h+'px';
+    el.style.opacity=p*(1-f);el.style.transform=`translateY(${(1-p)*70+f*30}px) scale(${1-f*.06})`;
+    el.style.borderColor=(t>starts[i]&&t<starts[i]+2.9&&i<3)?'':'';
+   }else{
+    x=lerp(x,FOCUS[0],f);y=lerp(y,FOCUS[1],f);w=lerp(w,FOCUS[2],f);h=lerp(h,FOCUS[3],f);
+    el.style.left=x+'px';el.style.top=y+'px';el.style.width=w+'px';el.style.height=h+'px';
+    el.style.opacity=p;el.style.transform=`translateY(${(1-p)*70}px)`;el.style.padding=`${lerp(40,56,f)}px ${lerp(36,56,f)}px`;
+    el.style.boxShadow=`0 ${18+f*20}px ${50+f*40}px rgba(212,24,118,${.06+f*.08})`;
+    $('C_4h').style.fontSize=lerp(44,78,f)+'px';$('C_4p').style.fontSize=lerp(21,30,f)+'px';
+    $('C_4x').style.opacity=eo(P(t,40.9,41.7));
+    [...$('C_chips').children].forEach((c,k)=>pop(c,t,41.3+k*.2,.5));
+    pop($('C_new'),t,38.5,.5);
+   }
+   // highlight active card while narrated
+   const act=i<3&&t>=starts[i]&&t<(starts[i+1]||99);
+   el.querySelector('.cbar').style.width=(i<3?(act?14:9):lerp(9,14,f))+'px';
+  }
+  $('C_head').style.opacity=Math.min(eo5(P(t,28.5,29.3)),1-f);
+ }
+ /* D */
+ if(sceneVis('D',t)){
+  rise($('D_text'),t,44.9,.9,30);
+  [[1,47.9],[2,50.4],[3,52.8]].forEach(([i,a])=>{const el=$('D_k'+i);const p=eo5(P(t,a,a+.7));el.style.opacity=p;el.style.transform=`translateX(${(1-p)*-40}px)`;
+   el.querySelector('.ck').style.transform=`scale(${back(P(t,a+.1,a+.6))})`});
+  const path=$('D_path2'),L=path.getTotalLength();
+  rise($('D_flow'),t,45.2,.9,30);
+  const nodesAt=[0,530,810,1340,1620,2150].map(v=>v/2150);
+  const draw=eio(P(t,46.2,52.4));
+  path.style.strokeDasharray=L;path.style.strokeDashoffset=L*(1-draw);
+  const pt=path.getPointAtLength(L*draw);const dot=$('D_dot'),g=$('D_dotg');
+  dot.setAttribute('cx',pt.x);dot.setAttribute('cy',pt.y);g.setAttribute('cx',pt.x);g.setAttribute('cy',pt.y);
+  const dv=P(t,46.0,46.4)*(1-P(t,52.4,52.9));dot.style.opacity=dv;g.style.opacity=.18*dv*(0.7+0.3*Math.sin(t*8));
+  for(let k=0;k<6;k++){const n=$('D_n'+k);const on=P(draw,nodesAt[k]-.001,nodesAt[k]+.04);
+   n.style.borderColor=on>0?`rgba(0,160,227,${.3+.7*on})`:'#d6dde3';n.style.color=on>.5?'#0b6f9e':'';
+   n.style.background=`rgb(${lerp(255,232,on)},${lerp(255,245,on)},${lerp(255,252,on)})`;
+   const a=n.querySelector('.auto');const ap=P(t,47.9+k*.18,48.4+k*.18)*(draw>=nodesAt[k]?1:0);a.style.opacity=ap;a.style.transform=`scale(${back(ap)})`;
+   n.style.transform=`scale(${1+.06*Math.sin(Math.PI*clamp((draw-nodesAt[k])/.05))})`;
+  }
+  // national reach pulse
+  const np=P(t,52.8,55.8);$('D_flow').style.filter='';
+ }
+ /* E */
+ if(sceneVis('E',t)){
+  rise($('E_win'),t,56.4,.9,40);rise($('E_text'),t,56.7,.9,30);
+  pop($('E_status'),t,57.4,.5);
+  rise($('E_lead'),t,58.7,.7,20);
+  [60.0,60.7,62.4,63.4,64.4].forEach((a,i)=>pop($('E_c'+i),t,a,.5));
+  const bt=[59.6,60.3,61.0,61.7,63.0,65.6];
+  const palY=[66,124,182,240,298,298];
+  for(let i=0;i<6;i++){const b=$('E_b'+i);const p=eo5(P(t,bt[i],bt[i]+.75));
+   const dx=(26-250)*(1-p),dy=(52+palY[i]-parseFloat(b.style.top))*(1-p);
+   b.style.opacity=clamp(p*3);b.style.transform=`translate(${dx}px,${dy}px) scale(${lerp(.3,1,p)})`;b.style.transformOrigin='left top';
+   b.style.boxShadow=p<1&&p>0?'0 18px 40px rgba(0,0,0,.18)':'none';}
+  // cursor follows the latest block
+  let ci=0;for(let i=0;i<6;i++)if(t>=bt[i])ci=i;
+  const cp=eo5(P(t,bt[ci],bt[ci]+.75));const tb=$('E_b'+ci);
+  const tx=parseFloat(tb.style.left)+parseFloat(tb.style.width)*.55, ty=parseFloat(tb.style.top)+30;
+  const cx=lerp(110,tx,cp), cy=lerp(52+palY[ci]+20,ty,cp);
+  const cu=$('E_cursor');cu.style.left=cx+'px';cu.style.top=cy+'px';cu.style.opacity=P(t,59.2,59.6)*(1-P(t,66.6,67))*(t>65.6&&t<66.6?1:1);
+  const txt='Resumo gerado: pedido de suporte ao PJe da 2ª Vara, prioridade média.';
+  const n=Math.floor(txt.length*P(t,64.4,66.4));$('E_type').textContent=txt.slice(0,n);
+  $('E_caret').style.opacity=(Math.floor(t*2.2)%2===0||(t>64.4&&t<66.4))?1:0;
+ }
+ /* F */
+ if(sceneVis('F',t)){
+  rise($('F_head'),t,69.4,.9,30);
+  $('F_row').style.transform=`translateX(${150-(t-69.3)*62}px)`;
+  pcards.forEach((c,i)=>{const p=eo5(P(t,69.6+i*.12,70.4+i*.12));
+   const hl=i===0?P(t,70.0,70.4)*(1-P(t,71.6,72)):i===1?P(t,71.3,71.7)*(1-P(t,73.4,73.8)):0;
+   c.style.opacity=p;c.style.transform=`translateY(${(1-p)*60-hl*16}px) scale(${1+hl*.07})`;
+   c.style.boxShadow=`0 ${14+hl*20}px ${40+hl*30}px rgba(0,0,0,${.05+hl*.08})`;c.style.borderColor=hl>0?PR[i][2]:'';
+   c.style.zIndex=hl>0?2:1;});
+ }
+ /* G */
+ if(sceneVis('G',t)){
+  const lg=eo5(P(t,76.1,77.2));$('G_logo').style.opacity=lg;$('G_logo').style.transform=`translateY(${(1-lg)*30}px) scale(${lerp(.94,1,lg)})`;
+  G_w.forEach((w,i)=>{const p=eo5(P(t,77.4+i*.11,78.3+i*.11));w.style.transform=`translateY(${(1-p)*110}%)`;w.style.opacity=p});
+  [['g1',78.8,'#00A0E3'],['g2',79.55,'#7AB648'],['g3',81.0,'#D41876']].forEach(([c,a,col])=>{const e=$('G_t').querySelector('.'+c);const p=P(t,a,a+.4);
+   e.style.color=p>0?col:'var(--ink)';e.style.opacity=1});
+  $('G_bar').style.transform=`scaleX(${eo5(P(t,80.0,81.2))})`;
+ }
+ /* H */
+ if(sceneVis('H',t)){
+  const pieces={tl:[-1,-1,-28,83.35],tr:[1,-1,24,83.5],bl:[-1,1,24,83.65],br:[1,1,-28,83.8]};
+  for(const k in pieces){const [dx,dy,r,a]=pieces[k];const p=ex(P(t,a,a+1.25));const el=$('H_'+k);
+   el.style.opacity=clamp(P(t,a,a+.45));el.style.transform=`translate(${dx*(1-p)*330}px,${dy*(1-p)*330}px) rotate(${r*(1-p)}deg) scale(${lerp(.7,1,p)})`;
+   el.style.transformOrigin=`${SCX-parseFloat(el.style.left)}px ${SCY-parseFloat(el.style.top)}px`;}
+  [['H_c1',84.75,1.6,420],['H_c2',84.95,1.8,560]].forEach(([id,a,d,R])=>{const c=$(id);const p=P(t,a,a+d);c.setAttribute('cx',SCX);c.setAttribute('cy',SCY);
+   c.setAttribute('r',20+eo(p)*R*LS*1.3);c.style.opacity=(p>0&&p<1)?(1-p)*.35:0});
+  const t1=eo5(P(t,85.15,86.4));$('H_t1c').style.clipPath=`inset(0 ${(1-t1)*50}% 0 ${(1-t1)*50}%)`;$('H_t1').style.opacity=t1;
+  $('H_t1').style.transform=`scale(${lerp(1.04,1,t1)})`;$('H_t1').style.transformOrigin='center';
+  const t2=eo5(P(t,85.9,86.9));$('H_t2').style.opacity=t2;$('H_t2').style.transform=`translateY(${(1-t2)*18}px)`;
+  const z=lerp(1,1.035,eio(P(t,84.6,90)));$('H_wrap').style.transform=`scale(${z})`;
+  $('H_wrap').style.opacity=1-P(t,89.45,89.95);
+ }
+};
+window.ready=document.fonts.ready.then(()=>Promise.all([...document.images].map(i=>i.complete?1:new Promise(r=>i.onload=r))));
+</script>
+</body></html>

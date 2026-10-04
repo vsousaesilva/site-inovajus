@@ -1,0 +1,51 @@
+1
+00:00:08,954 --> 00:00:13,661
+Este é o Inovajus, o Laboratório de Inovação da Justiça Federal no Ceará.
+
+2
+00:00:13,975 --> 00:00:20,157
+Desde 2019, transformamos a cultura institucional com método, ciência e humanização.
+
+3
+00:00:21,158 --> 00:00:27,135
+São mais de 150 servidores capacitados, 11 projetos e 4 eixos de atuação.
+
+4
+00:00:28,991 --> 00:00:31,540
+PJe e Automação de Fluxos.
+
+5
+00:00:31,855 --> 00:00:34,490
+Segurança no Tratamento de Dados.
+
+6
+00:00:34,758 --> 00:00:37,489
+Tecnologia e Inteligência Artificial.
+
+7
+00:00:37,854 --> 00:00:43,489
+E o novo Eixo de Linguagem Simples e Acessibilidade, que aproxima a Justiça do cidadão.
+
+8
+00:00:45,753 --> 00:00:50,307
+No Laboratório de Fluxos do PJe, automatizamos peças repetitivas
+
+9
+00:00:50,307 --> 00:00:54,097
+e redesenhamos fluxos processuais, com alcance nacional.
+
+10
+00:00:56,954 --> 00:01:00,698
+E no Lab Low Code, os próprios servidores criam automações,
+
+11
+00:01:00,698 --> 00:01:06,931
+formulários inteligentes e aplicações, com baixo código e inteligência artificial generativa.
+
+12
+00:01:09,970 --> 00:01:14,860
+Do Mandado Cidadão ao Teatro PopRua, levamos inovação a quem mais precisa.
+
+13
+00:01:16,951 --> 00:01:21,685
+Inovajus. Uma Justiça mais eficiente, acessível e centrada nas pessoas.

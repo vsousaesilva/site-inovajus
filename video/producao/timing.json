@@ -1,0 +1,170 @@
+{
+ "cues": [
+  [
+   8.954416666666667,
+   13.661375,
+   "Este é o Inovajus, o Laboratório de Inovação da Justiça Federal no Ceará."
+  ],
+  [
+   13.974708333333334,
+   20.156916666666667,
+   "Desde 2019, transformamos a cultura institucional com método, ciência e humanização."
+  ],
+  [
+   21.158333333333335,
+   27.134875,
+   "São mais de 150 servidores capacitados, 11 projetos e 4 eixos de atuação."
+  ],
+  [
+   28.9905,
+   31.540208333333332,
+   "PJe e Automação de Fluxos."
+  ],
+  [
+   31.85504166666667,
+   34.48970833333333,
+   "Segurança no Tratamento de Dados."
+  ],
+  [
+   34.75816666666667,
+   37.48916666666666,
+   "Tecnologia e Inteligência Artificial."
+  ],
+  [
+   37.85429166666667,
+   43.48895833333333,
+   "E o novo Eixo de Linguagem Simples e Acessibilidade, que aproxima a Justiça do cidadão."
+  ],
+  [
+   45.752916666666664,
+   50.30683333333333,
+   "No Laboratório de Fluxos do PJe, automatizamos peças repetitivas"
+  ],
+  [
+   50.30683333333333,
+   54.09654166666667,
+   "e redesenhamos fluxos processuais, com alcance nacional."
+  ],
+  [
+   56.95375,
+   60.698458333333335,
+   "E no Lab Low Code, os próprios servidores criam automações,"
+  ],
+  [
+   60.698458333333335,
+   66.93120833333333,
+   "formulários inteligentes e aplicações, com baixo código e inteligência artificial generativa."
+  ],
+  [
+   69.96991666666666,
+   74.85970833333333,
+   "Do Mandado Cidadão ao Teatro PopRua, levamos inovação a quem mais precisa."
+  ],
+  [
+   76.95141666666667,
+   81.685,
+   "Inovajus. Uma Justiça mais eficiente, acessível e centrada nas pessoas."
+  ]
+ ],
+ "lines": [
+  {
+   "i": 0,
+   "start": 9.0,
+   "dur": 4.565333333333333,
+   "speech": [
+    9.034416666666667,
+    13.411375
+   ]
+  },
+  {
+   "i": 1,
+   "start": 14.0,
+   "dur": 6.058666666666666,
+   "speech": [
+    14.054708333333334,
+    19.906916666666667
+   ]
+  },
+  {
+   "i": 2,
+   "start": 21.2,
+   "dur": 5.802666666666667,
+   "speech": [
+    21.238333333333333,
+    26.884875
+   ]
+  },
+  {
+   "i": 3,
+   "start": 29.0,
+   "dur": 2.3893333333333335,
+   "speech": [
+    29.0705,
+    31.290208333333332
+   ]
+  },
+  {
+   "i": 4,
+   "start": 31.9,
+   "dur": 2.432,
+   "speech": [
+    31.935041666666667,
+    34.23970833333333
+   ]
+  },
+  {
+   "i": 5,
+   "start": 34.8,
+   "dur": 2.5813333333333333,
+   "speech": [
+    34.838166666666666,
+    37.23916666666666
+   ]
+  },
+  {
+   "i": 6,
+   "start": 37.9,
+   "dur": 5.482666666666667,
+   "speech": [
+    37.93429166666667,
+    43.23895833333333
+   ]
+  },
+  {
+   "i": 7,
+   "start": 45.8,
+   "dur": 8.170666666666667,
+   "speech": [
+    45.83291666666666,
+    53.84654166666667
+   ]
+  },
+  {
+   "i": 8,
+   "start": 57.0,
+   "dur": 9.792,
+   "speech": [
+    57.03375,
+    66.68120833333333
+   ]
+  },
+  {
+   "i": 9,
+   "start": 70.0,
+   "dur": 4.757333333333333,
+   "speech": [
+    70.04991666666666,
+    74.60970833333333
+   ]
+  },
+  {
+   "i": 10,
+   "start": 77.0,
+   "dur": 4.650666666666667,
+   "speech": [
+    77.03141666666667,
+    81.435
+   ]
+  }
+ ]
+}
